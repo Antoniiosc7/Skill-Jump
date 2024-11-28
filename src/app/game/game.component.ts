@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 export class GameComponent implements OnInit {
   @ViewChild('gameContainer', { static: true }) gameContainer!: ElementRef;
   app!: PIXI.Application;
-  player!: PIXI.Sprite;
+  player!: PIXI.AnimatedSprite;
   ground!: PIXI.Sprite;
   obstacles: PIXI.Sprite[] = [];
   gravity = 1;
@@ -55,8 +55,7 @@ export class GameComponent implements OnInit {
 
       this.gameContainer.nativeElement.appendChild(this.app.canvas);
 
-      const playerTexture = await PIXI.Assets.load('assets/bunny.png');
-      this.createPlayer(playerTexture);
+      await this.createPlayer(); // Ensure createPlayer is awaited
       this.createGround();
       this.createObstacles();
       this.createScoreText();
@@ -69,13 +68,28 @@ export class GameComponent implements OnInit {
     }
   }
 
-  createPlayer(texture: PIXI.Texture) {
-    this.player = new PIXI.Sprite(texture);
+  async createPlayer() {
+    const spriteSheetTexture = await PIXI.Assets.load('assets/Biker_run.png');
+    const frameWidth = 48; // Adjust according to the size of the frames in the sprite sheet
+    const frameHeight = 48; // Adjust according to the size of the frames
+    const totalFrames = 6; // Number of frames in the sprite sheet
+
+    const source = spriteSheetTexture.source; // Use source instead of baseTexture
+    const textures: PIXI.Texture[] = [];
+
+    for (let i = 0; i < totalFrames; i++) {
+      const rectangle = new PIXI.Rectangle(i * frameWidth, 0, frameWidth, frameHeight);
+      const subTexture = new PIXI.Texture({ source, frame: rectangle }); // Create a subtexture
+      textures.push(subTexture);
+    }
+
+    this.player = new PIXI.AnimatedSprite(textures);
     this.player.x = 100;
-    this.player.y = 500;
+    this.player.y = 400;
     this.player.anchor.set(0.5);
-    this.player.width = 100;
-    this.player.height = 100;
+    this.player.animationSpeed = 0.1; // Animation speed
+    this.player.scale.set(1, 2  ); // Scale the player to be taller
+    this.player.play(); // Start the animation
 
     this.app.stage.addChild(this.player);
   }
@@ -83,7 +97,7 @@ export class GameComponent implements OnInit {
   createGround() {
     this.ground = new PIXI.Sprite(PIXI.Texture.WHITE);
     this.ground.height = 50;
-    this.ground.y = 600;
+    this.ground.y = 575 ;
     this.ground.tint = 0x654321;
     this.updateGroundWidth();
 
@@ -122,7 +136,7 @@ export class GameComponent implements OnInit {
       fill: 'white',
     });
 
-    this.scoreText = new PIXI.Text({ text: 'Score: 0', style });
+    this.scoreText = new PIXI.Text('Score: 0', style);
     this.scoreText.anchor.set(1, 0);
     this.scoreText.x = this.app.renderer.width - 20;
     this.scoreText.y = 20;
@@ -219,8 +233,7 @@ export class GameComponent implements OnInit {
     this.createScoreText();
     this.createGround();
     this.createObstacles();
-    const texture = this.player.texture;
-    this.createPlayer(texture);
+    this.createPlayer();
   }
 
   onRestart() {
