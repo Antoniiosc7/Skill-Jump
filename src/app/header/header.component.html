@@ -1,0 +1,11 @@
+<header class="bg-gradient-to-r from-blue-500 to-purple-600 p-6 shadow-lg flex justify-between items-center">
+  <h1 (click)="navigateToHome()" class="text-4xl font-extrabold text-white text-center drop-shadow-lg cursor-pointer">Skill Jump</h1>
+  <div>
+    <button *ngIf="!isLoggedIn" (click)="navigateToLogin()" class="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full shadow-md">
+      Login
+    </button>
+    <button *ngIf="!isLoggedIn" (click)="navigateToRegister()" class="bg-green-600 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-full shadow-md ml-2">
+      Register
+    </button>
+  </div>
+</header>

@@ -1,0 +1,7 @@
+<div class="game-container">
+  <div #leftGameContainer class="left-game-container"></div>
+  <div #rightGameContainer class="right-game-container"></div>
+</div>
+
+<app-game-over *ngIf="leftIsGameOver || rightIsGameOver" (restart)="onRestart()" (goHome)="onGoHome()"></app-game-over>
+<app-pause-menu *ngIf="isPaused && !leftIsGameOver && !rightIsGameOver" (restart)="onRestart()" (continue)="onContinue()" (goHome)="onGoHome()"></app-pause-menu>

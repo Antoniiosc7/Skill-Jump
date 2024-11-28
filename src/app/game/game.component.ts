@@ -1,7 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import * as PIXI from 'pixi.js';
-import {GameOverComponent} from './game-over/game-over.component';
-import {NgIf} from '@angular/common';
+import { GameOverComponent } from './game-over/game-over.component';
+import { PauseMenuComponent } from './pause-menu/pause-menu.component';
+import { NgIf } from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-game',
@@ -9,6 +11,7 @@ import {NgIf} from '@angular/common';
   standalone: true,
   imports: [
     GameOverComponent,
+    PauseMenuComponent,
     NgIf
   ],
   styleUrls: ['./game.component.css']
@@ -23,10 +26,13 @@ export class GameComponent implements OnInit {
   playerSpeed = 5;
   isJumping = false;
   isGameOver = false;
+  isPaused = false;
   cameraOffset = 0;
   score = 0;
   scoreText!: PIXI.Text;
   elapsedTime = 0;
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.initializePixi();
@@ -41,8 +47,8 @@ export class GameComponent implements OnInit {
     try {
       this.app = new PIXI.Application();
       await this.app.init({
-        width: 800,
-        height: 600,
+        width: window.innerWidth-50,
+        height: window.innerHeight-50,
         backgroundColor: 0x1099bb,
       });
 
@@ -74,16 +80,20 @@ export class GameComponent implements OnInit {
 
   createObstacles() {
     this.obstacles = [];
+    let xPosition = 400;
     for (let i = 0; i < 20; i++) {
       const obstacle = new PIXI.Sprite(PIXI.Texture.WHITE);
       obstacle.width = 50;
       obstacle.height = 50;
-      obstacle.x = 400 + i * 300;
+      obstacle.x = xPosition;
       obstacle.y = 550;
       obstacle.tint = 0xff0000;
 
       this.obstacles.push(obstacle);
       this.app.stage.addChild(obstacle);
+
+      // Randomize the distance to the next obstacle
+      xPosition += 200 + Math.random() * 300;
     }
   }
 
@@ -103,18 +113,22 @@ export class GameComponent implements OnInit {
   }
 
   handleKeyDown(event: KeyboardEvent) {
-    if (event.code === 'Space' && !this.isJumping && !this.isGameOver) {
+    if (event.code === 'Space' && !this.isJumping && !this.isGameOver && !this.isPaused) {
       this.velocityY = -15;
       this.isJumping = true;
     }
 
-    if (event.code === 'Escape' && this.isGameOver) {
-      this.restartGame();
+    if (event.code === 'Escape') {
+      if (this.isGameOver) {
+        this.restartGame();
+      } else {
+        this.isPaused = !this.isPaused;
+      }
     }
   }
 
   gameLoop() {
-    if (this.isGameOver) return;
+    if (this.isGameOver || this.isPaused) return;
 
     this.elapsedTime += this.app.ticker.deltaMS;
     this.score = Math.floor(this.elapsedTime / 100);
@@ -169,6 +183,7 @@ export class GameComponent implements OnInit {
 
   restartGame() {
     this.isGameOver = false;
+    this.isPaused = false;
     this.score = 0;
     this.elapsedTime = 0;
     this.cameraOffset = 0;
@@ -186,7 +201,11 @@ export class GameComponent implements OnInit {
     this.restartGame();
   }
 
+  onContinue() {
+    this.isPaused = false;
+  }
+
   onGoHome() {
-    // Navigate to home
+      this.router.navigate(['']);
   }
 }

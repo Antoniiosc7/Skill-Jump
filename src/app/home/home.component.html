@@ -1,7 +1,4 @@
-<header class="bg-gradient-to-r from-blue-500 to-purple-600 p-6 shadow-lg">
-  <h1 class="text-4xl font-extrabold text-white text-center drop-shadow-lg">Game Home</h1>
-</header>
-
+<app-header></app-header>
 <main class="container mx-auto p-6 space-y-8">
   <!-- Single Player Section -->
   <section class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300">
@@ -11,35 +8,42 @@
       Play Now
     </button>
   </section>
-
+  <!-- Play Online with Friends Section -->
+  <section [ngClass]="{'grayscale': !isLoggedIn, 'tooltip': !isLoggedIn}" class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300" title="Please log in to access this section">
+    <h2 class="text-3xl font-semibold text-white mb-4">Play Online with Friends</h2>
+    <p class="text-lg text-gray-400 mb-6">Join your friends in an online game and have fun together.</p>
+    <button [disabled]="!isLoggedIn" class="bg-red-600 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+      Play Now
+    </button>
+  </section>
   <!-- Multiplayer Section -->
   <section class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300">
-    <h2 class="text-3xl font-semibold text-white mb-4">Multiplayer</h2>
+    <h2 class="text-3xl font-semibold text-white mb-4">Local Multiplayer</h2>
     <p class="text-lg text-gray-400 mb-6">Join a multiplayer game and challenge players worldwide.</p>
-    <button class="bg-green-600 hover:bg-green-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+    <button (click)="navigateToMultiplayer()" class="bg-green-600 hover:bg-green-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
       Join Game
     </button>
   </section>
 
   <!-- Top Scores Section -->
-  <section class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300">
+  <section [ngClass]="{'grayscale': !isLoggedIn, 'tooltip': !isLoggedIn}" class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300" title="Please log in to access this section">
     <h2 class="text-3xl font-semibold text-white mb-4">Top Scores</h2>
     <p class="text-lg text-gray-400 mb-6">See how you compare with the best players.</p>
-    <button class="bg-yellow-600 hover:bg-yellow-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+    <button [disabled]="!isLoggedIn" class="bg-yellow-600 hover:bg-yellow-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
       View Scores
     </button>
   </section>
 
   <!-- Choose Skins Section -->
-  <section class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300">
+  <section [ngClass]="{'grayscale': !isLoggedIn, 'tooltip': !isLoggedIn}" class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300" title="Please log in to access this section">
     <h2 class="text-3xl font-semibold text-white mb-4">Choose Skins</h2>
     <p class="text-lg text-gray-400 mb-6">Customize your character with unique skins and stand out.</p>
-    <button class="bg-purple-600 hover:bg-purple-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+    <button [disabled]="!isLoggedIn" class="bg-purple-600 hover:bg-purple-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
       Choose Skins
     </button>
   </section>
 </main>
 
 <footer class="bg-gradient-to-r from-blue-500 to-purple-600 p-4 text-center text-white">
-  <p class="text-lg">© 2023 Game Home. All rights reserved.</p>
+  <p class="text-lg">© 2024 Skill Jump. All rights reserved.</p>
 </footer>

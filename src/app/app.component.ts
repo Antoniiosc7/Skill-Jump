@@ -10,5 +10,5 @@ import {MiniHeaderComponent} from './components/mini-header/mini-header.componen
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'gamev3';
+  title = 'Skill Jump';
 }

@@ -1,3 +1,4 @@
 <div #gameContainer class="game-container"></div>
 
 <app-game-over *ngIf="isGameOver" (restart)="onRestart()" (goHome)="onGoHome()"></app-game-over>
+<app-pause-menu *ngIf="isPaused && !isGameOver" (restart)="onRestart()" (continue)="onContinue()" (goHome)="onGoHome()"></app-pause-menu>
