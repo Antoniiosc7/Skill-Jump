@@ -7,8 +7,6 @@ import {FooterComponent} from '../../components/footer/footer.component';
   selector: 'app-login',
   templateUrl: './login.component.html',
   imports: [
-    HeaderComponent,
-    FooterComponent
   ],
   standalone: true,
   styleUrls: ['./login.component.css']

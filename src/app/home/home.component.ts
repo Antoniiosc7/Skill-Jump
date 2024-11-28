@@ -10,9 +10,7 @@ import {FooterComponent} from '../components/footer/footer.component';
   templateUrl: './home.component.html',
   imports: [
     NgClass,
-    HeaderComponent,
-    NewsComponent,
-    FooterComponent
+    NewsComponent
   ],
   standalone: true,
   styleUrls: ['./home.component.css']

@@ -48,8 +48,8 @@ export class GameComponent implements OnInit {
     try {
       this.app = new PIXI.Application();
       await this.app.init({
-        width: window.innerWidth - 50,
-        height: window.innerHeight - 50,
+        width: window.innerWidth - 2,
+        height: window.innerHeight - 120,
         backgroundColor: 0x1099bb,
       });
 

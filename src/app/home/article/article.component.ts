@@ -18,8 +18,6 @@ interface NewsPost {
   standalone: true,
   imports: [
     DatePipe,
-    HeaderComponent,
-    FooterComponent,
     NgIf
   ],
   styleUrls: ['./article.component.css']
