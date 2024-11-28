@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js';
 import { GameOverComponent } from './game-over/game-over.component';
 import { PauseMenuComponent } from './pause-menu/pause-menu.component';
 import { NgIf } from '@angular/common';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-game',
@@ -20,10 +20,11 @@ export class GameComponent implements OnInit {
   @ViewChild('gameContainer', { static: true }) gameContainer!: ElementRef;
   app!: PIXI.Application;
   player!: PIXI.Sprite;
+  ground!: PIXI.Sprite;
   obstacles: PIXI.Sprite[] = [];
   gravity = 1;
   velocityY = 0;
-  playerSpeed = 5;
+  playerSpeed = 5; // Slower speed
   isJumping = false;
   isGameOver = false;
   isPaused = false;
@@ -47,15 +48,16 @@ export class GameComponent implements OnInit {
     try {
       this.app = new PIXI.Application();
       await this.app.init({
-        width: window.innerWidth-50,
-        height: window.innerHeight-50,
+        width: window.innerWidth - 50,
+        height: window.innerHeight - 50,
         backgroundColor: 0x1099bb,
       });
 
       this.gameContainer.nativeElement.appendChild(this.app.canvas);
 
-      const texture = await PIXI.Assets.load('assets/bunny.png');
-      this.createPlayer(texture);
+      const playerTexture = await PIXI.Assets.load('assets/bunny.png');
+      this.createPlayer(playerTexture);
+      this.createGround();
       this.createObstacles();
       this.createScoreText();
 
@@ -78,16 +80,32 @@ export class GameComponent implements OnInit {
     this.app.stage.addChild(this.player);
   }
 
-  createObstacles() {
+  createGround() {
+    this.ground = new PIXI.Sprite(PIXI.Texture.WHITE);
+    this.ground.height = 50;
+    this.ground.y = 600;
+    this.ground.tint = 0x654321;
+    this.updateGroundWidth();
+
+    this.app.stage.addChild(this.ground);
+
+    window.addEventListener('resize', () => this.updateGroundWidth());
+  }
+
+  updateGroundWidth() {
+    this.ground.width = this.app.renderer.width;
+  }
+
+  async createObstacles() {
     this.obstacles = [];
     let xPosition = 400;
     for (let i = 0; i < 20; i++) {
-      const obstacle = new PIXI.Sprite(PIXI.Texture.WHITE);
+      const obstacleTexture = await PIXI.Assets.load('assets/obstacle.png'); // Ensure the path is correct
+      const obstacle = new PIXI.Sprite(obstacleTexture);
       obstacle.width = 50;
       obstacle.height = 50;
       obstacle.x = xPosition;
       obstacle.y = 550;
-      obstacle.tint = 0xff0000;
 
       this.obstacles.push(obstacle);
       this.app.stage.addChild(obstacle);
@@ -168,11 +186,18 @@ export class GameComponent implements OnInit {
       height: bounds1.height * 0.5
     };
 
+    const hitbox2 = {
+      x: bounds2.x + bounds2.width * 0.1, // Reduce the width of the hitbox
+      y: bounds2.y + bounds2.height * 0.1, // Reduce the height of the hitbox
+      width: bounds2.width * 0.8, // Reduce the width of the hitbox
+      height: bounds2.height * 0.8 // Reduce the height of the hitbox
+    };
+
     return (
-      hitbox1.x < bounds2.x + bounds2.width &&
-      hitbox1.x + hitbox1.width > bounds2.x &&
-      hitbox1.y < bounds2.y + bounds2.height &&
-      hitbox1.y + hitbox1.height > bounds2.y
+      hitbox1.x < hitbox2.x + hitbox2.width &&
+      hitbox1.x + hitbox1.width > hitbox2.x &&
+      hitbox1.y < hitbox2.y + hitbox2.height &&
+      hitbox1.y + hitbox1.height > hitbox2.y
     );
   }
 
@@ -192,6 +217,7 @@ export class GameComponent implements OnInit {
     this.app.stage.x = 0;
 
     this.createScoreText();
+    this.createGround();
     this.createObstacles();
     const texture = this.player.texture;
     this.createPlayer(texture);
@@ -206,6 +232,6 @@ export class GameComponent implements OnInit {
   }
 
   onGoHome() {
-      this.router.navigate(['']);
+    this.router.navigate(['']);
   }
 }
