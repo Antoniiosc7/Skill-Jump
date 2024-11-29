@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 })
 export class GameComponent implements OnInit {
   @ViewChild('gameContainer', { static: true }) gameContainer!: ElementRef;
+  @ViewChild(GameOverComponent) gameOverComponent!: GameOverComponent;
   app!: PIXI.Application;
   player!: PIXI.AnimatedSprite;
   ground!: PIXI.Sprite;

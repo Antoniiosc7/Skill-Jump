@@ -1,13 +1,28 @@
-<div class="container mx-auto p-6 max-w-md">
-  <h2 class="text-3xl font-semibold text-center mb-6">Profile</h2>
-  <div class="mb-4">
-    <label class="block text-gray-700">Username:</label>
-    <p class="w-full p-2 border border-gray-300 rounded mt-1">{{ username }}</p>
+<div class="container mx-auto p-6 max-w-md bg-white shadow-lg rounded-lg mt-12 mb-12">
+  <h2 class="text-3xl font-semibold text-center mb-6 text-blue-600">Profile</h2>
+  <div *ngIf="idUsuario; else searchOrTopProfiles">
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold">Username:</label>
+      <p class="w-full p-2 border border-gray-300 rounded mt-1 bg-gray-100">{{ username }}</p>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold">Achievements:</label>
+      <ul class="w-full p-2 border border-gray-300 rounded mt-1 bg-gray-100">
+        <li *ngFor="let achievement of achievements" class="p-2 border-b last:border-b-0">{{ achievement }}</li>
+      </ul>
+    </div>
   </div>
-  <div class="mb-4">
-    <label class="block text-gray-700">Achievements:</label>
-    <ul class="w-full p-2 border border-gray-300 rounded mt-1">
-      <li *ngFor="let achievement of achievements">{{ achievement }}</li>
-    </ul>
-  </div>
+  <ng-template #searchOrTopProfiles>
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold">Search User:</label>
+      <input type="text" class="w-full p-2 border border-gray-300 rounded mt-1" #searchInput>
+      <button (click)="searchUserProfile(searchInput.value)" class="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full shadow-md mt-2">Search</button>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 font-bold">Top Profiles:</label>
+      <ul class="w-full p-2 border border-gray-300 rounded mt-1 bg-gray-100">
+        <li *ngFor="let profile of topProfiles" class="p-2 border-b last:border-b-0">{{ profile.username }} - {{ profile.score }} points</li>
+      </ul>
+    </div>
+  </ng-template>
 </div>
