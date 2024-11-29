@@ -1,20 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {NgIf} from '@angular/common';
+import { NgIf } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    imports: [
-        NgIf
-    ],
-    standalone: true,
-    styleUrls: ['./header.component.css']
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  imports: [
+    NgIf
+  ],
+  standalone: true,
+  styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
-  isLoggedIn = false; // This should be set based on your authentication logic
+export class HeaderComponent implements OnInit {
+  isLoggedIn = false;
+  username: string | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService, private cdr: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    this.updateAuthStatus();
+    this.authService.authStatusChanged.subscribe(status => {
+      this.updateAuthStatus();
+    });
+  }
+
+  updateAuthStatus() {
+    this.isLoggedIn = this.authService.isLoggedIn();
+    this.username = this.authService.getUsername();
+    this.cdr.detectChanges();
+  }
 
   navigateToHome() {
     this.router.navigate(['/']);
@@ -26,5 +42,14 @@ export class HeaderComponent {
 
   navigateToRegister() {
     this.router.navigate(['/register']);
+  }
+
+  navigateToProfile() {
+    this.router.navigate(['/profile']);
+  }
+
+  logout() {
+    this.authService.clearSessionData();
+    this.router.navigate(['/login']);
   }
 }

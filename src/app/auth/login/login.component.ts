@@ -1,21 +1,42 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import {HeaderComponent} from '../../components/header/header.component';
-import {FooterComponent} from '../../components/footer/footer.component';
+import { ApiService } from '../../services/api.service';
+import { FormsModule } from '@angular/forms';
+import { LoginDto } from '../../services/models/login-dto.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  imports: [
-  ],
   standalone: true,
+  imports: [
+    FormsModule
+  ],
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  constructor(private router: Router) {}
+  username: string = '';
+  password: string = '';
+
+  constructor(private router: Router, private apiService: ApiService, private authService: AuthService) {}
 
   login() {
-    // Implement login logic here
+    const loginDto: LoginDto = {
+      username: this.username,
+      password: this.password
+    };
+
+    this.apiService.login(loginDto).subscribe(
+      response => {
+        // Handle login response, e.g., save the token and user data
+        console.log('Login successful', response);
+        this.authService.setSessionData(this.username, response.token);
+        this.router.navigate(['/']);
+      },
+      error => {
+        console.error('Login failed', error);
+      }
+    );
   }
 
   navigateToRegister() {

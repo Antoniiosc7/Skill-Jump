@@ -7,5 +7,11 @@
     <button *ngIf="!isLoggedIn" (click)="navigateToRegister()" class="bg-green-600 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-full shadow-md ml-2">
       Register
     </button>
+    <button *ngIf="isLoggedIn" (click)="navigateToProfile()" class="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full shadow-md">
+      {{ username }}
+    </button>
+    <button *ngIf="isLoggedIn" (click)="logout()" class="bg-red-600 hover:bg-red-800 text-white font-semibold py-2 px-4 rounded-full shadow-md ml-2">
+      Logout
+    </button>
   </div>
 </header>

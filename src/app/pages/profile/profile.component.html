@@ -1,0 +1,13 @@
+<div class="container mx-auto p-6 max-w-md">
+  <h2 class="text-3xl font-semibold text-center mb-6">Profile</h2>
+  <div class="mb-4">
+    <label class="block text-gray-700">Username:</label>
+    <p class="w-full p-2 border border-gray-300 rounded mt-1">{{ username }}</p>
+  </div>
+  <div class="mb-4">
+    <label class="block text-gray-700">Achievements:</label>
+    <ul class="w-full p-2 border border-gray-300 rounded mt-1">
+      <li *ngFor="let achievement of achievements">{{ achievement }}</li>
+    </ul>
+  </div>
+</div>
