@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
     this.titleService.setTitle(this.title);
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.showFooter = event.url !== '/game';
+        this.showFooter = event.url !== '/game' &&  event.url !== '/multiplayer';
       }
     });
   }

@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
-  standalone: true,
   imports: [
     GameOverComponent,
     PauseMenuComponent,
@@ -55,7 +54,6 @@ export class GameComponent implements OnInit {
       });
 
       this.gameContainer.nativeElement.appendChild(this.app.canvas);
-
       await this.createPlayer(); // Ensure createPlayer is awaited
       this.createGround();
       this.createObstacles();
@@ -96,38 +94,32 @@ export class GameComponent implements OnInit {
   }
 
   createGround() {
-    this.ground = new PIXI.Sprite(PIXI.Texture.WHITE);
-    this.ground.height = 50;
-    this.ground.y = 575 ;
-    this.ground.tint = 0x654321;
-    this.updateGroundWidth();
-
-    this.app.stage.addChild(this.ground);
-
-    window.addEventListener('resize', () => this.updateGroundWidth());
   }
 
   updateGroundWidth() {
     this.ground.width = this.app.renderer.width;
   }
 
+
   async createObstacles() {
     this.obstacles = [];
     let xPosition = 400;
     for (let i = 0; i < 20; i++) {
-      const obstacleTexture = await PIXI.Assets.load('assets/obstacle.png'); // Ensure the path is correct
-      const obstacle = new PIXI.Sprite(obstacleTexture);
-      obstacle.width = 50;
-      obstacle.height = 50;
-      obstacle.x = xPosition;
-      obstacle.y = 550;
-
-      this.obstacles.push(obstacle);
-      this.app.stage.addChild(obstacle);
-
-      // Randomize the distance to the next obstacle
+      await this.addObstacle(xPosition);
       xPosition += 200 + Math.random() * 300;
     }
+  }
+
+  async addObstacle(xPosition: number) {
+    const obstacleTexture = await PIXI.Assets.load('assets/obstacle.png');
+    const obstacle = new PIXI.Sprite(obstacleTexture);
+    obstacle.width = 50;
+    obstacle.height = 50;
+    obstacle.x = xPosition;
+    obstacle.y = 550;
+
+    this.obstacles.push(obstacle);
+    this.app.stage.addChild(obstacle);
   }
 
   createScoreText() {
@@ -188,7 +180,14 @@ export class GameComponent implements OnInit {
         return;
       }
     }
+
+    const lastObstacle = this.obstacles[this.obstacles.length - 1];
+    if (lastObstacle && lastObstacle.x - this.cameraOffset < this.app.renderer.width) {
+      const xPosition = lastObstacle.x + 200 + Math.random() * 300;
+      this.addObstacle(xPosition);
+    }
   }
+
 
   checkCollision(sprite1: PIXI.Sprite, sprite2: PIXI.Sprite): boolean {
     const bounds1 = sprite1.getBounds();
