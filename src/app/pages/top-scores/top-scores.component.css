@@ -1,0 +1,35 @@
+.container {
+  max-width: 800px;
+}
+
+.podium {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.podium div {
+  text-align: center;
+  margin: 0 1rem;
+}
+
+.podium .first {
+  background-color: #FFD700;
+}
+
+.podium .second {
+  background-color: #C0C0C0;
+}
+
+.podium .third {
+  background-color: #CD7F32;
+}
+
+.podium div div {
+  margin-top: 0.5rem;
+}
+
+.podium .score {
+  font-size: 1.5rem;
+  font-weight: bold;
+}

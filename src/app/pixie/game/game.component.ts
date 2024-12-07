@@ -22,6 +22,8 @@ export class GameComponent implements OnInit {
   player!: PIXI.AnimatedSprite;
   ground!: PIXI.Sprite;
   obstacles: PIXI.Sprite[] = [];
+  groundTiles: PIXI.TilingSprite | undefined;
+  background: PIXI.TilingSprite | undefined;
   gravity = 1;
   velocityY = 0;
   playerSpeed = 5; // Slower speed
@@ -54,8 +56,11 @@ export class GameComponent implements OnInit {
       });
 
       this.gameContainer.nativeElement.appendChild(this.app.canvas);
+      await this.createBackground();
+      await this.createGround();
       await this.createPlayer(); // Ensure createPlayer is awaited
-      this.createGround();
+
+
       this.createObstacles();
       this.createScoreText();
 
@@ -66,6 +71,9 @@ export class GameComponent implements OnInit {
       console.error('Error initializing PixiJS:', error);
     }
   }
+
+
+
 
   async createPlayer() {
     const spriteSheetTexture = await PIXI.Assets.load('assets/Biker_run.png');
@@ -93,8 +101,6 @@ export class GameComponent implements OnInit {
     this.app.stage.addChild(this.player);
   }
 
-  createGround() {
-  }
 
   updateGroundWidth() {
     this.ground.width = this.app.renderer.width;
@@ -152,6 +158,20 @@ export class GameComponent implements OnInit {
     }
   }
 
+  async createBackground() {
+    const texture = await PIXI.Assets.load('assets/urbano.webp');
+    this.background = new PIXI.TilingSprite(texture, this.app.screen.width, this.app.screen.height);
+    this.background.y = -240 ; // Ajusta si quieres que comience en otra posición
+    this.app.stage.addChild(this.background);
+  }
+
+  async createGround() {
+    const texture = await PIXI.Assets.load('assets/suelo.png');
+    this.groundTiles = new PIXI.TilingSprite(texture, this.app.screen.width, this.app.screen.height);
+    this.groundTiles.y = this.app.screen.height - 240;
+    this.app.stage.addChild(this.groundTiles);
+  }
+
   gameLoop() {
     if (this.isGameOver || this.isPaused) return;
 
@@ -159,8 +179,7 @@ export class GameComponent implements OnInit {
     this.score = Math.floor(this.elapsedTime / 100);
     this.scoreText.text = `Score: ${this.score}`;
 
-    this.scoreText.x = this.cameraOffset + this.app.renderer.width - 20;
-
+    // Gravedad y salto del jugador
     this.velocityY += this.gravity;
     this.player.y += this.velocityY;
 
@@ -170,22 +189,37 @@ export class GameComponent implements OnInit {
       this.isJumping = false;
     }
 
-    this.player.x += this.playerSpeed;
-    this.cameraOffset += this.playerSpeed;
-    this.app.stage.x = -this.cameraOffset;
+    // Movimiento del fondo
+    if (this.background) {
+      this.background.tilePosition.x -= this.playerSpeed * 0.5; // Desplaza el fondo hacia la izquierda
+    }
 
+    // Movimiento del suelo
+    if (this.groundTiles) {
+      this.groundTiles.tilePosition.x -= this.playerSpeed; // Desplaza el suelo hacia la izquierda
+    }
+
+    // Movimiento de los obstáculos
     for (const obstacle of this.obstacles) {
+      obstacle.x -= this.playerSpeed; // Desplaza los obstáculos hacia la izquierda
+
+      // Comprobación de colisión entre el jugador y los obstáculos
       if (this.checkCollision(this.player, obstacle)) {
         this.gameOver();
         return;
       }
     }
 
+    // Generar nuevos obstáculos cuando el último sale de la pantalla
     const lastObstacle = this.obstacles[this.obstacles.length - 1];
-    if (lastObstacle && lastObstacle.x - this.cameraOffset < this.app.renderer.width) {
-      const xPosition = lastObstacle.x + 200 + Math.random() * 300;
+    if (lastObstacle && lastObstacle.x < this.app.renderer.width - this.cameraOffset) {
+      const xPosition = this.app.renderer.width + Math.random() * 300; // Posición fuera de la pantalla
       this.addObstacle(xPosition);
     }
+
+    // Actualizar posición de la cámara para mantener la puntuación
+    this.cameraOffset += this.playerSpeed;
+    this.scoreText.x = this.cameraOffset + this.app.renderer.width - 20;
   }
 
 
@@ -230,6 +264,7 @@ export class GameComponent implements OnInit {
     this.app.stage.removeChildren();
     this.app.stage.x = 0;
 
+    this.createBackground();
     this.createScoreText();
     this.createGround();
     this.createObstacles();

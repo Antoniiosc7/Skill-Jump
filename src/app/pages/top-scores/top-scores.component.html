@@ -1,0 +1,60 @@
+<div class="container mx-auto p-4">
+  <h1 class="text-3xl font-bold mb-4">Top Scores</h1>
+
+  <!-- Podium for Top 3 -->
+  <div class="flex justify-center mb-8">
+    <div class="text-center mx-4">
+      <div class="bg-yellow-400 text-white font-bold py-2 px-4 rounded-full">1st</div>
+      <div class="mt-2">{{ topScores[0].username }}</div>
+      <div class="text-xl font-bold">{{ topScores[0].score }}</div>
+    </div>
+    <div class="text-center mx-4">
+      <div class="bg-gray-400 text-white font-bold py-2 px-4 rounded-full">2nd</div>
+      <div class="mt-2">{{ topScores[1].username }}</div>
+      <div class="text-xl font-bold">{{ topScores[1].score }}</div>
+    </div>
+    <div class="text-center mx-4">
+      <div class="bg-yellow-800 text-white font-bold py-2 px-4 rounded-full">3rd</div>
+      <div class="mt-2">{{ topScores[2].username }}</div>
+      <div class="text-xl font-bold">{{ topScores[2].score }}</div>
+    </div>
+  </div>
+
+  <!-- Top 10 Historical Scores -->
+  <div class="bg-white shadow-md rounded-lg overflow-hidden mb-8">
+    <h2 class="text-2xl font-bold mb-4 text-center">Top 10 Historical Scores</h2>
+    <table class="min-w-full bg-white">
+      <thead class="bg-gray-800 text-white">
+      <tr>
+        <th class="w-1/3 py-2 text-center">Username</th>
+        <th class="w-1/3 py-2 text-center">Score</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let score of topScores.slice(3)" (click)="navigateToProfile(score.username)" class="cursor-pointer hover:bg-gray-200">
+        <td class="py-2 px-4 text-center">{{ score.username }}</td>
+        <td class="py-2 px-4 text-center">{{ score.score }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Monthly Scores -->
+  <div class="bg-white shadow-md rounded-lg overflow-hidden">
+    <h2 class="text-2xl font-bold mb-4 text-center">Top 10 Monthly Scores</h2>
+    <table class="min-w-full bg-white">
+      <thead class="bg-gray-800 text-white">
+      <tr>
+        <th class="w-1/3 py-2 text-center">Username</th>
+        <th class="w-1/3 py-2 text-center">Score</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let score of monthlyScores" (click)="navigateToProfile(score.username)" class="cursor-pointer hover:bg-gray-200">
+        <td class="py-2 px-4 text-center">{{ score.username }}</td>
+        <td class="py-2 px-4 text-center">{{ score.score }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -41,6 +41,10 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  navigateToTopScores(): void {
+    this.router.navigate(['/top-scores']);
+  }
+
   navigateToMultiplayer() {
     this.router.navigate(['/multiplayer']);
   }
