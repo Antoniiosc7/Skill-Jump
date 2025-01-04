@@ -171,7 +171,7 @@ export class GameComponent implements OnInit {
   async createGround() {
     const texture = await PIXI.Assets.load('assets/suelo.png');
     this.groundTiles = new PIXI.TilingSprite({ texture, width: this.app.screen.width, height: this.app.screen.height });
-    this.groundTiles.y = this.app.screen.height - 240;
+    this.groundTiles.y = 598;
     this.app.stage.addChild(this.groundTiles);
   }
 
