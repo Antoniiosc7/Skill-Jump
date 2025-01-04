@@ -96,8 +96,8 @@ export class GameComponent implements OnInit {
     }
 
     this.player = new PIXI.AnimatedSprite(textures);
-    this.player.x = 100;
-    this.player.y = 400;
+    this.player.x = this.app.screen.width / 2;
+    this.player.y = this.app.screen.height / 2;
     this.player.anchor.set(0.5);
     this.player.animationSpeed = 0.1; // Animation speed
     this.player.scale.set(1, 2); // Scale the player to be taller
@@ -112,7 +112,7 @@ export class GameComponent implements OnInit {
 
   async createObstacles() {
     this.obstacles = [];
-    let xPosition = 400;
+    let xPosition = 1900;
     for (let i = 0; i < 20; i++) {
       await this.addObstacle(xPosition);
       xPosition += 200 + Math.random() * 300;
@@ -138,7 +138,7 @@ export class GameComponent implements OnInit {
       fill: 'white',
     });
 
-    this.scoreText = new PIXI.Text('Score: 0', style);
+    this.scoreText = new PIXI.Text({ text: 'Score: 0', style });
     this.scoreText.anchor.set(1, 0);
     this.scoreText.x = this.app.renderer.width - 20;
     this.scoreText.y = 20;
@@ -163,14 +163,14 @@ export class GameComponent implements OnInit {
 
   async createBackground() {
     const texture = await PIXI.Assets.load('assets/urbano.webp');
-    this.background = new PIXI.TilingSprite(texture, this.app.screen.width, this.app.screen.height);
-    this.background.y = -240 ; // Ajusta si quieres que comience en otra posición
+    this.background = new PIXI.TilingSprite({ texture, width: this.app.screen.width, height: this.app.screen.height });
+    this.background.y = -240; // Adjust if you want it to start at a different position
     this.app.stage.addChild(this.background);
   }
 
   async createGround() {
     const texture = await PIXI.Assets.load('assets/suelo.png');
-    this.groundTiles = new PIXI.TilingSprite(texture, this.app.screen.width, this.app.screen.height);
+    this.groundTiles = new PIXI.TilingSprite({ texture, width: this.app.screen.width, height: this.app.screen.height });
     this.groundTiles.y = this.app.screen.height - 240;
     this.app.stage.addChild(this.groundTiles);
   }
@@ -220,9 +220,8 @@ export class GameComponent implements OnInit {
       this.addObstacle(xPosition);
     }
 
-    // Actualizar posición de la cámara para mantener la puntuación
-    this.cameraOffset += this.playerSpeed;
-    this.scoreText.x = this.cameraOffset + this.app.renderer.width - 20;
+    // Mantener la posición del texto de puntuación fija
+    this.scoreText.x = this.app.renderer.width - 20;
   }
 
 
@@ -268,10 +267,10 @@ export class GameComponent implements OnInit {
     this.app.stage.x = 0;
 
     this.createBackground();
-    this.createScoreText();
     this.createGround();
     this.createObstacles();
     this.createPlayer();
+    this.createScoreText(); // Ensure scoreText is created last
   }
 
   onRestart() {

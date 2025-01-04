@@ -33,7 +33,7 @@ export class ApiService {
     const params = new HttpParams()
       .set('username', username)
       .set('score', score.toString());
-    return this.http.post<string>(`${this.scoresUrl}/post`, null, { params });
+    return this.http.post(`${this.scoresUrl}/post`, null, { params, responseType: 'text' });
   }
 
   getTop10Historical(): Observable<UserScore[]> {
