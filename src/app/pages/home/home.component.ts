@@ -48,4 +48,8 @@ export class HomeComponent implements OnInit {
   navigateToMultiplayer() {
     this.router.navigate(['/multiplayer']);
   }
+
+  navigateToSkins() {
+    this.router.navigate(['/skins']);
+  }
 }

@@ -12,6 +12,7 @@ import { UserScore } from './models/user-score-dto.model';
 export class ApiService {
   private baseUrl = `${API_URL}/api/auth`;
   private scoresUrl = `${API_URL}/api/scores`;
+  private atributos = `${API_URL}/api/user-attributes`;
 
   constructor(private http: HttpClient) { }
 
@@ -47,5 +48,17 @@ export class ApiService {
     console.log(username)
     const params = new HttpParams().set('username', username);
     return this.http.get<UserScore[]>(`${this.scoresUrl}/top10user`, { params });
+  }
+
+  changeSelectedSkin(username: string, skin: string): Observable<string> {
+    const params = new HttpParams()
+      .set('username', username)
+      .set('skin', skin);
+    return this.http.post<string>(`${this.atributos}/change-skin`, null, { params });
+  }
+
+  getSelectedSkin(username: string): Observable<string> {
+    const params = new HttpParams().set('username', username);
+    return this.http.get(`${this.atributos}/current-skin`, { params, responseType: 'text' });
   }
 }

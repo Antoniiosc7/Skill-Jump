@@ -37,7 +37,7 @@
   <section [ngClass]="{'grayscale': !isLoggedIn, 'tooltip': !isLoggedIn}" class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300" title="Please log in to access this section">
     <h2 class="text-3xl font-semibold text-white mb-4">Choose Skins</h2>
     <p class="text-lg text-gray-400 mb-6">Customize your character with unique skins and stand out.</p>
-    <button [disabled]="!isLoggedIn" class="bg-purple-600 hover:bg-purple-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+    <button [disabled]="!isLoggedIn" (click)="navigateToSkins()" class="bg-purple-600 hover:bg-purple-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
       Choose Skins
     </button>
   </section>

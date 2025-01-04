@@ -1,0 +1,16 @@
+<div class="container mx-auto p-8">
+  <button (click)="goBack()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-4">Back</button>
+
+  <h2 class="text-3xl font-bold text-center text-blue-600 mb-8">Select Your Skin</h2>
+  <div class="flex items-center justify-center">
+    <button (click)="previousSkin()" class="text-4xl text-blue-600 hover:text-blue-800">&larr;</button>
+    <div #pixiContainer class="mx-8 text-center"></div>
+    <button (click)="nextSkin()" class="text-4xl text-blue-600 hover:text-blue-800">&rarr;</button>
+  </div>
+  <div class="text-center mt-4">
+    <h3 class="text-2xl font-semibold">{{ skins[selectedSkinIndex].name }}</h3>
+  </div>
+  <div class="text-center mt-8">
+    <button (click)="confirmSelection()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Confirm</button>
+  </div>
+</div>

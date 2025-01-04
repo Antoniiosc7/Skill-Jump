@@ -4,6 +4,8 @@ import { GameOverComponent } from './game-over/game-over.component';
 import { PauseMenuComponent } from './pause-menu/pause-menu.component';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-game',
@@ -34,8 +36,8 @@ export class GameComponent implements OnInit {
   score = 0;
   scoreText!: PIXI.Text;
   elapsedTime = 0;
-
-  constructor(private router: Router) {}
+  username!: any;
+  constructor(private router: Router, private authService: AuthService, private apiService: ApiService) {}
 
   ngOnInit() {
     this.initializePixi();
@@ -76,7 +78,10 @@ export class GameComponent implements OnInit {
 
 
   async createPlayer() {
-    const spriteSheetTexture = await PIXI.Assets.load('assets/Biker_run.png');
+    this.username = this.authService.getUsername();
+    const skin = this.username ? await this.apiService.getSelectedSkin(this.username).toPromise() : 'Biker';
+
+    const spriteSheetTexture = await PIXI.Assets.load(`assets/runs/${skin}_run.png`);
     const frameWidth = 48; // Adjust according to the size of the frames in the sprite sheet
     const frameHeight = 48; // Adjust according to the size of the frames
     const totalFrames = 6; // Number of frames in the sprite sheet
@@ -95,13 +100,11 @@ export class GameComponent implements OnInit {
     this.player.y = 400;
     this.player.anchor.set(0.5);
     this.player.animationSpeed = 0.1; // Animation speed
-    this.player.scale.set(1, 2  ); // Scale the player to be taller
+    this.player.scale.set(1, 2); // Scale the player to be taller
     this.player.play(); // Start the animation
 
     this.app.stage.addChild(this.player);
   }
-
-
   updateGroundWidth() {
     this.ground.width = this.app.renderer.width;
   }

@@ -7,6 +7,7 @@ import {RegisterComponent} from './auth/register/register.component';
 import {ArticleComponent} from './pages/home/article/article.component';
 import {ProfileComponent} from './pages/profile/profile.component';
 import { TopScoresComponent } from './pages/top-scores/top-scores.component';
+import { SkinsComponent } from './pages/skins/skins.component';
 
 export const routes: Routes = [
   { path: '',  component: HomeComponent },
@@ -17,5 +18,6 @@ export const routes: Routes = [
   { path: 'multiplayer',  component: MultiplayerGameComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'profile/:idUsuario', component: ProfileComponent },
-  { path: 'top-scores', component: TopScoresComponent }
+  { path: 'top-scores', component: TopScoresComponent },
+  { path: 'skins', component: SkinsComponent }
 ];
