@@ -1,7 +1,4 @@
 .game-container {
   display: flex;
-}
-
-.left-game-container, .right-game-container {
-  width: 50%;
+  justify-content: space-between;
 }

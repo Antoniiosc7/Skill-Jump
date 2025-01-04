@@ -1,9 +1,11 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import {Component, OnInit, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
 import * as PIXI from 'pixi.js';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import {PauseMenuComponent} from '../game/pause-menu/pause-menu.component';
 import {GameOverComponent} from '../game/game-over/game-over.component';
+import { AuthService } from '../../services/auth.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-multiplayer-game',
@@ -11,77 +13,80 @@ import {GameOverComponent} from '../game/game-over/game-over.component';
   standalone: true,
   imports: [
     NgIf,
-    PauseMenuComponent,
-    GameOverComponent
+    GameOverComponent,
+    PauseMenuComponent
   ],
   styleUrls: ['./multiplayer-game.component.css']
 })
 export class MultiplayerGameComponent implements OnInit {
-  @ViewChild('leftGameContainer', { static: true }) leftGameContainer!: ElementRef;
-  @ViewChild('rightGameContainer', { static: true }) rightGameContainer!: ElementRef;
-  leftApp!: PIXI.Application;
-  rightApp!: PIXI.Application;
-  leftPlayer!: PIXI.Sprite;
-  rightPlayer!: PIXI.Sprite;
-  leftObstacles: PIXI.Sprite[] = [];
-  rightObstacles: PIXI.Sprite[] = [];
+  @ViewChild('gameContainer', { static: true }) gameContainer!: ElementRef;
+  @ViewChild(GameOverComponent) gameOverComponent!: GameOverComponent;
+  appLeft!: PIXI.Application;
+  appRight!: PIXI.Application;
+  playerLeft!: PIXI.AnimatedSprite;
+  playerRight!: PIXI.AnimatedSprite;
+  groundLeft!: PIXI.Sprite;
+  groundRight!: PIXI.Sprite;
+  obstaclesLeft: PIXI.Sprite[] = [];
+  obstaclesRight: PIXI.Sprite[] = [];
+  groundTilesLeft: PIXI.TilingSprite | undefined;
+  groundTilesRight: PIXI.TilingSprite | undefined;
+  backgroundLeft: PIXI.TilingSprite | undefined;
+  backgroundRight: PIXI.TilingSprite | undefined;
   gravity = 1;
-  leftVelocityY = 0;
-  rightVelocityY = 0;
+  velocityYLeft = 0;
+  velocityYRight = 0;
   playerSpeed = 5;
-  leftIsJumping = false;
-  rightIsJumping = false;
-  leftIsGameOver = false;
-  rightIsGameOver = false;
+  isJumpingLeft = false;
+  isJumpingRight = false;
+  isGameOverLeft = false;
+  isGameOverRight = false;
   isPaused = false;
-  leftCameraOffset = 0;
-  rightCameraOffset = 0;
-  leftScore = 0;
-  rightScore = 0;
-  leftScoreText!: PIXI.Text;
-  rightScoreText!: PIXI.Text;
-  elapsedTime = 0;
+  cameraOffset = 0;
+  scoreLeft = 0;
+  scoreRight = 0;
+  scoreTextLeft!: PIXI.Text;
+  scoreTextRight!: PIXI.Text;
+  elapsedTimeLeft = 0;
+  elapsedTimeRight = 0;
+  username!: any;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService, private apiService: ApiService) {}
 
   ngOnInit() {
     this.initializePixi();
   }
 
   async initializePixi() {
-    if (!this.leftGameContainer || !this.rightGameContainer) {
-      console.error('Game containers not found');
+    if (!this.gameContainer) {
+      console.error('Game container not found');
       return;
     }
 
     try {
-  this.leftApp = new PIXI.Application();
-  this.rightApp = new PIXI.Application();
-  const halfWidth = window.innerWidth / 2;
-  await this.leftApp.init({
-    width: halfWidth-10,
-    height: window.innerHeight-50,
-    backgroundColor: 0x1099bb,
-  });
-  await this.rightApp.init({
-    width: halfWidth-10,
-    height: window.innerHeight-50,
-    backgroundColor: 0x1099bb,
-  });
+      this.appLeft = new PIXI.Application();
+      this.appRight = new PIXI.Application();
 
-      this.leftGameContainer.nativeElement.appendChild(this.leftApp.canvas);
-      this.rightGameContainer.nativeElement.appendChild(this.rightApp.canvas);
+      await this.appLeft.init({ width: window.innerWidth / 2 -10, height: window.innerHeight - 150, backgroundColor: 0x1099bb });
+      await this.appRight.init({ width: window.innerWidth / 2 -10, height: window.innerHeight - 150, backgroundColor: 0x1099bb });
 
-      const texture = await PIXI.Assets.load('assets/bunny.png');
-      this.createPlayer(texture, 'left');
-      this.createPlayer(texture, 'right');
-      this.createObstacles('left');
-      this.createObstacles('right');
-      this.createScoreText('left');
-      this.createScoreText('right');
+      this.gameContainer.nativeElement.appendChild(this.appLeft.canvas);
+      this.gameContainer.nativeElement.appendChild(this.appRight.canvas);
 
-      this.leftApp.ticker.add(() => this.gameLoop('left'));
-      this.rightApp.ticker.add(() => this.gameLoop('right'));
+      await this.createBackground(this.appLeft, 'left');
+      await this.createBackground(this.appRight, 'right');
+      await this.createGround(this.appLeft, 'left');
+      await this.createGround(this.appRight, 'right');
+      await this.createPlayer(this.appLeft, 'left');
+      await this.createPlayer(this.appRight, 'right');
+
+      this.createObstacles(this.appLeft, 'left');
+      this.createObstacles(this.appRight, 'right');
+      this.createScoreText(this.appLeft, 'left');
+      this.createScoreText(this.appRight, 'right');
+
+      this.appLeft.ticker.add(() => this.gameLoop(this.appLeft, 'left'));
+      this.appRight.ticker.add(() => this.gameLoop(this.appRight, 'right'));
 
       window.addEventListener('keydown', (e) => this.handleKeyDown(e));
     } catch (error) {
@@ -89,52 +94,90 @@ export class MultiplayerGameComponent implements OnInit {
     }
   }
 
-  createPlayer(texture: PIXI.Texture, side: 'left' | 'right') {
-    const player = new PIXI.Sprite(texture);
-    player.x = 100;
-    player.y = 500;
+  async createPlayer(app: PIXI.Application, side: 'left' | 'right') {
+    const skin = side === 'left' ? 'Biker' : 'Punk';
+
+    const spriteSheetTexture = await PIXI.Assets.load(`assets/runs/${skin}_run.png`);
+    const frameWidth = 48;
+    const frameHeight = 48;
+    const totalFrames = 6;
+
+    const source = spriteSheetTexture.source;
+    const textures: PIXI.Texture[] = [];
+
+    for (let i = 0; i < totalFrames; i++) {
+      const rectangle = new PIXI.Rectangle(i * frameWidth, 0, frameWidth, frameHeight);
+      const subTexture = new PIXI.Texture({ source, frame: rectangle });
+      textures.push(subTexture);
+    }
+
+    const player = new PIXI.AnimatedSprite(textures);
+    player.x = app.screen.width / 2;
+    player.y = app.screen.height / 2;
     player.anchor.set(0.5);
-    player.width = 100;
-    player.height = 100;
+    player.animationSpeed = 0.1;
+    player.scale.set(1, 2);
+    player.play();
+
+    app.stage.addChild(player);
 
     if (side === 'left') {
-      this.leftPlayer = player;
-      this.leftApp.stage.addChild(player);
+      this.playerLeft = player;
     } else {
-      this.rightPlayer = player;
-      this.rightApp.stage.addChild(player);
+      this.playerRight = player;
+     }
+  }
+
+  async createBackground(app: PIXI.Application, side: 'left' | 'right') {
+    const texture = await PIXI.Assets.load('assets/urbano.webp');
+    const background = new PIXI.TilingSprite({ texture, width: app.screen.width, height: app.screen.height });
+    background.y = -240;
+    app.stage.addChild(background);
+
+    if (side === 'left') {
+      this.backgroundLeft = background;
+    } else {
+      this.backgroundRight = background;
     }
   }
 
-  createObstacles(side: 'left' | 'right') {
-    const obstacles = [];
-    let xPosition = 400;
+  async createGround(app: PIXI.Application, side: 'left' | 'right') {
+    const texture = await PIXI.Assets.load('assets/suelo.png');
+    const groundTiles = new PIXI.TilingSprite({ texture, width: app.screen.width, height: app.screen.height });
+    groundTiles.y = 598;
+    app.stage.addChild(groundTiles);
+
+    if (side === 'left') {
+      this.groundTilesLeft = groundTiles;
+    } else {
+      this.groundTilesRight = groundTiles;
+    }
+  }
+
+  async createObstacles(app: PIXI.Application, side: 'left' | 'right') {
+    const obstacles: PIXI.Sprite[] = [];
+    let xPosition = 1900;
     for (let i = 0; i < 20; i++) {
-      const obstacle = new PIXI.Sprite(PIXI.Texture.WHITE);
+      const obstacleTexture = await PIXI.Assets.load('assets/obstacle.png');
+      const obstacle = new PIXI.Sprite(obstacleTexture);
       obstacle.width = 50;
       obstacle.height = 50;
       obstacle.x = xPosition;
       obstacle.y = 550;
-      obstacle.tint = 0xff0000;
 
       obstacles.push(obstacle);
-      if (side === 'left') {
-        this.leftApp.stage.addChild(obstacle);
-      } else {
-        this.rightApp.stage.addChild(obstacle);
-      }
-
+      app.stage.addChild(obstacle);
       xPosition += 200 + Math.random() * 300;
     }
 
     if (side === 'left') {
-      this.leftObstacles = obstacles;
+      this.obstaclesLeft = obstacles;
     } else {
-      this.rightObstacles = obstacles;
+      this.obstaclesRight = obstacles;
     }
   }
 
-  createScoreText(side: 'left' | 'right') {
+  createScoreText(app: PIXI.Application, side: 'left' | 'right') {
     const style = new PIXI.TextStyle({
       fontFamily: 'Arial',
       fontSize: 24,
@@ -143,31 +186,31 @@ export class MultiplayerGameComponent implements OnInit {
 
     const scoreText = new PIXI.Text({ text: 'Score: 0', style });
     scoreText.anchor.set(1, 0);
-    scoreText.x = 380;
+    scoreText.x = app.renderer.width - 20;
     scoreText.y = 20;
 
+    app.stage.addChild(scoreText);
+
     if (side === 'left') {
-      this.leftScoreText = scoreText;
-      this.leftApp.stage.addChild(scoreText);
+      this.scoreTextLeft = scoreText;
     } else {
-      this.rightScoreText = scoreText;
-      this.rightApp.stage.addChild(scoreText);
+      this.scoreTextRight = scoreText;
     }
   }
 
   handleKeyDown(event: KeyboardEvent) {
-    if (event.code === 'Space' && !this.leftIsJumping && !this.leftIsGameOver && !this.isPaused) {
-      this.leftVelocityY = -15;
-      this.leftIsJumping = true;
+    if (event.code === 'Space' && !this.isJumpingLeft && !this.isGameOverLeft && !this.isPaused) {
+      this.velocityYLeft = -15;
+      this.isJumpingLeft = true;
     }
 
-    if (event.code === 'ArrowUp' && !this.rightIsJumping && !this.rightIsGameOver && !this.isPaused) {
-      this.rightVelocityY = -15;
-      this.rightIsJumping = true;
+    if (event.code === 'ArrowUp' && !this.isJumpingRight && !this.isGameOverRight && !this.isPaused) {
+      this.velocityYRight = -15;
+      this.isJumpingRight = true;
     }
 
     if (event.code === 'Escape') {
-      if (this.leftIsGameOver || this.rightIsGameOver) {
+      if (this.isGameOverLeft || this.isGameOverRight) {
         this.restartGame();
       } else {
         this.isPaused = !this.isPaused;
@@ -175,61 +218,103 @@ export class MultiplayerGameComponent implements OnInit {
     }
   }
 
-  gameLoop(side: 'left' | 'right') {
-    if (this.isPaused) return;
+  gameLoop(app: PIXI.Application, side: 'left' | 'right') {
+    if (this.isGameOverLeft || this.isGameOverRight || this.isPaused) return;
 
-    this.elapsedTime += this.leftApp.ticker.deltaMS;
     if (side === 'left') {
-      if (this.leftIsGameOver) return;
-      this.leftScore = Math.floor(this.elapsedTime / 100);
-      this.leftScoreText.text = `Score: ${this.leftScore}`;
-      this.leftScoreText.x = this.leftCameraOffset + 380;
+      this.elapsedTimeLeft += app.ticker.deltaMS;
+      this.scoreLeft = Math.floor(this.elapsedTimeLeft / 100);
+      this.scoreTextLeft.text = `Score: ${this.scoreLeft}`;
 
-      this.leftVelocityY += this.gravity;
-      this.leftPlayer.y += this.leftVelocityY;
+      this.velocityYLeft += this.gravity;
+      this.playerLeft.y += this.velocityYLeft;
 
-      if (this.leftPlayer.y >= 550) {
-        this.leftPlayer.y = 550;
-        this.leftVelocityY = 0;
-        this.leftIsJumping = false;
+      if (this.playerLeft.y >= 550) {
+        this.playerLeft.y = 550;
+        this.velocityYLeft = 0;
+        this.isJumpingLeft = false;
       }
 
-      this.leftPlayer.x += this.playerSpeed;
-      this.leftCameraOffset += this.playerSpeed;
-      this.leftApp.stage.x = -this.leftCameraOffset;
-
-      for (const obstacle of this.leftObstacles) {
-        if (this.checkCollision(this.leftPlayer, obstacle)) {
-          this.gameOver('left');
-          return;
-        }
-      }
-    } else {
-      if (this.rightIsGameOver) return;
-      this.rightScore = Math.floor(this.elapsedTime / 100);
-      this.rightScoreText.text = `Score: ${this.rightScore}`;
-      this.rightScoreText.x = this.rightCameraOffset + 380;
-
-      this.rightVelocityY += this.gravity;
-      this.rightPlayer.y += this.rightVelocityY;
-
-      if (this.rightPlayer.y >= 550) {
-        this.rightPlayer.y = 550;
-        this.rightVelocityY = 0;
-        this.rightIsJumping = false;
+      if (this.backgroundLeft) {
+        this.backgroundLeft.tilePosition.x -= this.playerSpeed * 0.5;
       }
 
-      this.rightPlayer.x += this.playerSpeed;
-      this.rightCameraOffset += this.playerSpeed;
-      this.rightApp.stage.x = -this.rightCameraOffset;
+      if (this.groundTilesLeft) {
+        this.groundTilesLeft.tilePosition.x -= this.playerSpeed;
+      }
 
-      for (const obstacle of this.rightObstacles) {
-        if (this.checkCollision(this.rightPlayer, obstacle)) {
+      for (const obstacle of this.obstaclesLeft) {
+        obstacle.x -= this.playerSpeed;
+
+        if (this.checkCollision(this.playerLeft, obstacle)) {
           this.gameOver('right');
           return;
         }
       }
+
+      const lastObstacle = this.obstaclesLeft[this.obstaclesLeft.length - 1];
+      if (lastObstacle && lastObstacle.x < app.renderer.width - this.cameraOffset) {
+        const xPosition = app.renderer.width + Math.random() * 300;
+        this.addObstacle(app, xPosition, 'left');
+      }
+
+      this.scoreTextLeft.x = app.renderer.width - 20;
+    } else {
+      this.elapsedTimeRight += app.ticker.deltaMS;
+      this.scoreRight = Math.floor(this.elapsedTimeRight / 100);
+      this.scoreTextRight.text = `Score: ${this.scoreRight}`;
+
+      this.velocityYRight += this.gravity;
+      this.playerRight.y += this.velocityYRight;
+
+      if (this.playerRight.y >= 550) {
+        this.playerRight.y = 550;
+        this.velocityYRight = 0;
+        this.isJumpingRight = false;
+      }
+
+      if (this.backgroundRight) {
+        this.backgroundRight.tilePosition.x -= this.playerSpeed * 0.5;
+      }
+
+      if (this.groundTilesRight) {
+        this.groundTilesRight.tilePosition.x -= this.playerSpeed;
+      }
+
+      for (const obstacle of this.obstaclesRight) {
+        obstacle.x -= this.playerSpeed;
+
+        if (this.checkCollision(this.playerRight, obstacle)) {
+          this.gameOver('left');
+          return;
+        }
+      }
+
+      const lastObstacle = this.obstaclesRight[this.obstaclesRight.length - 1];
+      if (lastObstacle && lastObstacle.x < app.renderer.width - this.cameraOffset) {
+        const xPosition = app.renderer.width + Math.random() * 300;
+        this.addObstacle(app, xPosition, 'right');
+      }
+
+      this.scoreTextRight.x = app.renderer.width - 20;
     }
+  }
+
+  async addObstacle(app: PIXI.Application, xPosition: number, side: 'left' | 'right') {
+    const obstacleTexture = await PIXI.Assets.load('assets/obstacle.png');
+    const obstacle = new PIXI.Sprite(obstacleTexture);
+    obstacle.width = 50;
+    obstacle.height = 50;
+    obstacle.x = xPosition;
+    obstacle.y = 550;
+
+    if (side === 'left') {
+      this.obstaclesLeft.push(obstacle);
+    } else {
+      this.obstaclesRight.push(obstacle);
+    }
+
+    app.stage.addChild(obstacle);
   }
 
   checkCollision(sprite1: PIXI.Sprite, sprite2: PIXI.Sprite): boolean {
@@ -243,45 +328,55 @@ export class MultiplayerGameComponent implements OnInit {
       height: bounds1.height * 0.5
     };
 
+    const hitbox2 = {
+      x: bounds2.x + bounds2.width * 0.1,
+      y: bounds2.y + bounds2.height * 0.1,
+      width: bounds2.width * 0.8,
+      height: bounds2.height * 0.8
+    };
+
     return (
-      hitbox1.x < bounds2.x + bounds2.width &&
-      hitbox1.x + hitbox1.width > bounds2.x &&
-      hitbox1.y < bounds2.y + bounds2.height &&
-      hitbox1.y + hitbox1.height > bounds2.y
+      hitbox1.x < hitbox2.x + hitbox2.width &&
+      hitbox1.x + hitbox1.width > hitbox2.x &&
+      hitbox1.y < hitbox2.y + hitbox2.height &&
+      hitbox1.y + hitbox1.height > hitbox2.y
     );
   }
 
-  gameOver(side: 'left' | 'right') {
-    if (side === 'left') {
-      this.leftIsGameOver = true;
+  gameOver(winner: 'left' | 'right') {
+    if (winner === 'left') {
+      this.isGameOverRight = true;
     } else {
-      this.rightIsGameOver = true;
+      this.isGameOverLeft = true;
     }
-    console.log('Game Over!');
+    console.log(`Game Over! ${winner} player wins!`);
   }
 
   restartGame() {
-    this.leftIsGameOver = false;
-    this.rightIsGameOver = false;
+    this.isGameOverLeft = false;
+    this.isGameOverRight = false;
     this.isPaused = false;
-    this.leftScore = 0;
-    this.rightScore = 0;
-    this.elapsedTime = 0;
-    this.leftCameraOffset = 0;
-    this.rightCameraOffset = 0;
+    this.scoreLeft = 0;
+    this.scoreRight = 0;
+    this.elapsedTimeLeft = 0;
+    this.elapsedTimeRight = 0;
+    this.cameraOffset = 0;
 
-    this.leftApp.stage.removeChildren();
-    this.rightApp.stage.removeChildren();
-    this.leftApp.stage.x = 0;
-    this.rightApp.stage.x = 0;
+    this.appLeft.stage.removeChildren();
+    this.appRight.stage.removeChildren();
+    this.appLeft.stage.x = 0;
+    this.appRight.stage.x = 0;
 
-    this.createScoreText('left');
-    this.createScoreText('right');
-    this.createObstacles('left');
-    this.createObstacles('right');
-    const texture = this.leftPlayer.texture;
-    this.createPlayer(texture, 'left');
-    this.createPlayer(texture, 'right');
+    this.createBackground(this.appLeft, 'left');
+    this.createBackground(this.appRight, 'right');
+    this.createGround(this.appLeft, 'left');
+    this.createGround(this.appRight, 'right');
+    this.createObstacles(this.appLeft, 'left');
+    this.createObstacles(this.appRight, 'right');
+    this.createPlayer(this.appLeft, 'left');
+    this.createPlayer(this.appRight, 'right');
+    this.createScoreText(this.appLeft, 'left');
+    this.createScoreText(this.appRight, 'right');
   }
 
   onRestart() {
