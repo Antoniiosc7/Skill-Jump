@@ -1,0 +1,14 @@
+<div class="room-manager">
+  <h2>Available Rooms</h2>
+  <ul>
+    <li *ngFor="let room of availableRooms">
+      Room ID: {{ room.id }}
+      <button (click)="joinRoom(room.id)">Join</button>
+    </li>
+  </ul>
+
+  <button (click)="createRoom()">Create Room</button>
+  <div *ngIf="inviteLink">
+    <p>Invite Link: {{ inviteLink }}</p>
+  </div>
+</div>
