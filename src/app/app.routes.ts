@@ -8,6 +8,8 @@ import {ArticleComponent} from './pages/home/article/article.component';
 import {ProfileComponent} from './pages/profile/profile.component';
 import { TopScoresComponent } from './pages/top-scores/top-scores.component';
 import { SkinsComponent } from './pages/skins/skins.component';
+import { OnlineMultiplayerComponent } from './pixie/online-multiplayer/online-multiplayer.component';
+import {RoomManagerComponent} from './pixie/online-multiplayer/room-manager/room-manager.component';
 
 export const routes: Routes = [
   { path: '',  component: HomeComponent },
@@ -19,5 +21,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'profile/:idUsuario', component: ProfileComponent },
   { path: 'top-scores', component: TopScoresComponent },
-  { path: 'skins', component: SkinsComponent }
+  { path: 'skins', component: SkinsComponent },
+  { path: 'online-multiplayer', component: RoomManagerComponent },
+  { path: 'join/:roomId', component: OnlineMultiplayerComponent }
 ];

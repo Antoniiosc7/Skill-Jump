@@ -52,4 +52,8 @@ export class HomeComponent implements OnInit {
   navigateToSkins() {
     this.router.navigate(['/skins']);
   }
+
+  navigateToOnlineMultiplayer() {
+    this.router.navigate(['/online-multiplayer']);
+  }
 }
