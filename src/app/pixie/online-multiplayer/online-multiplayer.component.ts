@@ -82,6 +82,9 @@ export class OnlineMultiplayerComponent implements OnInit {
       this.stompClient.subscribe('/topic/movements', (message: any) => {
         this.handleMovement(JSON.parse(message.body));
       });
+      this.stompClient.subscribe('/topic/obstacles', (message: any) => {
+        this.handleObstacles(JSON.parse(message.body));
+      });
       this.joinSession();
     });
   }
@@ -119,14 +122,26 @@ export class OnlineMultiplayerComponent implements OnInit {
       console.log(`Game starts in ${this.countdown} seconds`);
       if (this.countdown === 0) {
         this.fetchRoomDetails();
-
+        this.syncObstacles();
         clearInterval(this.countdownInterval);
         this.startGame();
       }
     }, 1000);
   }
 
+  syncObstacles() {
+    const obstaclePositions = this.obstaclesLeft.map(obstacle => obstacle.x);
+    this.stompClient.send('/app/obstacles', {}, JSON.stringify(obstaclePositions));
+  }
 
+  handleObstacles(obstaclePositions: number[]) {
+    this.obstaclesLeft = [];
+    this.obstaclesRight = [];
+    obstaclePositions.forEach(position => {
+      this.addObstacle(this.appLeft, position, 'left');
+      this.addObstacle(this.appRight, position, 'right');
+    });
+  }
 
   handleKeyDown(event: KeyboardEvent) {
     if (event.code === 'Space' && !this.isPaused) {
@@ -136,8 +151,8 @@ export class OnlineMultiplayerComponent implements OnInit {
         this.stompClient.send('/app/move', {}, JSON.stringify({ player: 'left', action: 'jump' }));
       } else { // @ts-ignore
         if (this.authService.getUsername() === this.namePlayerRight && !this.isJumpingRight && !this.isGameOverRight) {
-                this.stompClient.send('/app/move', {}, JSON.stringify({ player: 'right', action: 'jump' }));
-              }
+          this.stompClient.send('/app/move', {}, JSON.stringify({ player: 'right', action: 'jump' }));
+        }
       }
     }
 
