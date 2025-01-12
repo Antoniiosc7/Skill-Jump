@@ -28,10 +28,10 @@ export class LoginComponent {
 
     this.apiService.login(loginDto).subscribe(
       response => {
-        // Handle login response, e.g., save the token and user data
         console.log('Login successful', response);
         this.authService.setSessionData(this.username, response.token);
-        this.router.navigate(['/']);
+        const returnUrl = this.router.routerState.snapshot.root.queryParams['returnUrl'] || '/';
+        this.router.navigate([returnUrl]);
       },
       error => {
         console.error('Login failed', error);

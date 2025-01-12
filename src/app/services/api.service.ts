@@ -74,19 +74,9 @@ export class ApiService {
   createRoom(): Observable<any> {
     return this.http.post<any>(`${this.wsBaseUrl}/rooms`, {});
   }
+
   getRoomDetails(roomId: string): Observable<any> {
     return this.http.post<any>(`${this.wsBaseUrl}/session`, { sessionId: roomId });
   }
-  connectWebSocket(handleSession: (session: any) => void, handleMovement: (movement: any) => void) {
-    const socket = new SockJS('http://localhost:8080/ws');
-    this.stompClient = Stomp.over(socket);
-    this.stompClient.connect({}, (frame: any) => {
-      this.stompClient.subscribe('/topic/session', (message: any) => {
-        handleSession(JSON.parse(message.body));
-      });
-      this.stompClient.subscribe('/topic/movements', (message: any) => {
-        handleMovement(JSON.parse(message.body));
-      });
-    });
-  }
+
 }

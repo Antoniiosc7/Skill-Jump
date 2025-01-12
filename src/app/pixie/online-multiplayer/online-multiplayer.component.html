@@ -1,6 +1,7 @@
 <app-room-manager></app-room-manager>
 <div #gameContainer class="game-container"></div>
 
+<app-countdown-timer [countdown]="countdown"></app-countdown-timer>
+
 <app-game-over *ngIf="isGameOverLeft || isGameOverRight" [score]="isGameOverLeft ? scoreRight : scoreLeft" (restart)="onRestart()" (goHome)="onGoHome()"></app-game-over>
 <app-pause-menu *ngIf="isPaused && !isGameOverLeft && !isGameOverRight" (restart)="onRestart()" (continue)="onContinue()" (goHome)="onGoHome()"></app-pause-menu>
-

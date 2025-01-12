@@ -1,14 +1,39 @@
-<div class="room-manager">
-  <h2>Available Rooms</h2>
-  <ul>
-    <li *ngFor="let room of availableRooms">
-      Room ID: {{ room.id }}
-      <button (click)="joinRoom(room.id)">Join</button>
+<div class="room-manager p-4">
+  <h2 class="text-2xl font-bold mb-4">Available Rooms</h2>
+  <div class="mb-4">
+    <input
+      type="text"
+      placeholder="Search rooms..."
+      [(ngModel)]="searchQuery"
+      (input)="filterRooms()"
+      class="w-full p-2 border border-gray-300 rounded"
+    />
+  </div>
+  <ul class="space-y-2">
+    <li *ngFor="let room of filteredRooms" class="p-4 border border-gray-300 rounded flex justify-between items-center">
+      <div>
+        <p class="font-semibold">Room ID: {{ room.id }}</p>
+        <p class="text-sm text-gray-600">Player Left: {{ room.playerLeft || 'N/A' }}</p>
+        <p class="text-sm text-gray-600">Player Right: {{ room.playerRight || 'N/A' }}</p>
+      </div>
+      <button
+        (click)="joinRoom(room.id)"
+        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        Join
+      </button>
     </li>
   </ul>
-
-  <button (click)="createRoom()">Create Room</button>
-  <div *ngIf="inviteLink">
-    <p>Invite Link: {{ inviteLink }}</p>
+  <button
+    (click)="createRoom()"
+    class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+  >
+    Create Room
+  </button>
+  <div *ngIf="inviteLink" class="mt-4 p-4 bg-gray-100 border border-gray-300 rounded">
+    <p class="font-semibold">Invite Link: {{ inviteLink }}</p>
+  </div>
+  <div class="mt-4">
+    <p class="font-semibold">Logged in as: {{ username }}</p>
   </div>
 </div>

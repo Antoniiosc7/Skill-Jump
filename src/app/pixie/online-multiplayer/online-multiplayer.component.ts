@@ -9,6 +9,8 @@ import { ApiService } from '../../services/api.service';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { RoomManagerComponent } from './room-manager/room-manager.component';
+import { CountdownTimerComponent } from './countdown-timer/countdown-timer.component';
+import {wsURL} from '../../../config';
 
 @Component({
   selector: 'app-online-multiplayer',
@@ -18,7 +20,8 @@ import { RoomManagerComponent } from './room-manager/room-manager.component';
     NgIf,
     GameOverComponent,
     PauseMenuComponent,
-    RoomManagerComponent
+    RoomManagerComponent,
+    CountdownTimerComponent
   ],
   styleUrls: ['./online-multiplayer.component.css']
 })
@@ -58,7 +61,7 @@ export class OnlineMultiplayerComponent implements OnInit {
   username!: any;
   private stompClient: any;
   private sessionId: number | null = null;
-  private countdown: number = 10;
+  countdown: number = 10;
   private countdownInterval: any;
   availableRooms: any[] = [];
   inviteLink: string | null = null;
@@ -73,7 +76,7 @@ export class OnlineMultiplayerComponent implements OnInit {
   }
 
   connectWebSocket() {
-    const socket = new SockJS('http://localhost:8080/ws');
+    const socket = new SockJS(`${wsURL}`);
     this.stompClient = Stomp.over(socket);
     this.stompClient.connect({}, (frame: any) => {
       this.stompClient.subscribe('/topic/session', (message: any) => {
@@ -96,6 +99,10 @@ export class OnlineMultiplayerComponent implements OnInit {
           this.namePlayerLeft = room.playerLeft;
           this.namePlayerRight = room.playerRight;
         }
+        console.log('Room details:', room);
+        if (room.playerLeft != null && room.playerRight != null) {
+          this.startCountdown();
+        }
       });
     }
   }
@@ -108,26 +115,20 @@ export class OnlineMultiplayerComponent implements OnInit {
   }
 
   handleSession(session: any) {
-    if (session.playerLeft && session.playerRight) {
-      this.startCountdown();
-    } else {
-      console.log('Waiting for another player...');
-    }
+    this.fetchRoomDetails();
   }
 
   startCountdown() {
     this.countdown = 10;
     this.countdownInterval = setInterval(() => {
       this.countdown--;
-      console.log(`Game starts in ${this.countdown} seconds`);
       if (this.countdown === 0) {
-        this.fetchRoomDetails();
-        this.syncObstacles();
         clearInterval(this.countdownInterval);
         this.startGame();
       }
     }, 1000);
   }
+
 
   syncObstacles() {
     const obstaclePositions = this.obstaclesLeft.map(obstacle => obstacle.x);
