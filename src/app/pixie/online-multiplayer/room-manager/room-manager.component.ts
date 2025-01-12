@@ -4,6 +4,7 @@ import { ApiService } from '../../../services/api.service';
 import { NgForOf, NgIf } from '@angular/common';
 import {AuthService} from '../../../services/auth.service';
 import {FormsModule} from '@angular/forms';
+import {FRONT_URL} from '../../../../config';
 
 @Component({
   selector: 'app-room-manager',
@@ -38,7 +39,7 @@ export class RoomManagerComponent implements OnInit {
 
   createRoom() {
     this.apiService.createRoom().subscribe((room: any) => {
-      this.inviteLink = `http://localhost:4200/join/${room.id}`;
+      this.inviteLink = `${FRONT_URL}/join/${room.id}`;
     });
   }
 
