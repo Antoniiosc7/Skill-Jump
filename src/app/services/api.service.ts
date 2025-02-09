@@ -34,6 +34,26 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/register`, registerDto, httpOptions);
   }
 
+  connectWebSocket(handleSession: (session: any) => void, handleMovement: (movement: any) => void, handleObstacles: (obstacles: any) => void, joinSession: () => void) {
+    const socket = new SockJS('http://localhost:8080/ws');
+    this.stompClient = Stomp.over(() => socket);
+    this.stompClient.connect({}, (frame: any) => {
+      console.log('Connected: ' + frame);
+      this.stompClient.subscribe('/topic/session', (message: any) => {
+        handleSession(JSON.parse(message.body));
+      });
+      this.stompClient.subscribe('/topic/movements', (message: any) => {
+        handleMovement(JSON.parse(message.body));
+      });
+      this.stompClient.subscribe('/topic/obstacles', (message: any) => {
+        handleObstacles(JSON.parse(message.body));
+      });
+      joinSession();
+    }, (error: any) => {
+      console.error('WebSocket connection error:', error);
+    });
+  }
+
   postScore(username: string, score: number): Observable<string> {
     const params = new HttpParams()
       .set('username', username)

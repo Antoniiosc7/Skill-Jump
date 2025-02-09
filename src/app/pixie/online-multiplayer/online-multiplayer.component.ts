@@ -71,25 +71,26 @@ export class OnlineMultiplayerComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.sessionId = params['roomId'];
-      this.connectWebSocket();
+      this.apiService.connectWebSocket(
+        this.handleSession.bind(this),
+        this.handleMovement.bind(this),
+        this.handleObstacles.bind(this),
+        this.joinSession.bind(this)
+      );
     });
   }
 
-  connectWebSocket() {
-    const socket = new SockJS(`${wsURL}`);
-    this.stompClient = Stomp.over(socket);
-    this.stompClient.connect({}, (frame: any) => {
-      this.stompClient.subscribe('/topic/session', (message: any) => {
-        this.handleSession(JSON.parse(message.body));
-      });
-      this.stompClient.subscribe('/topic/movements', (message: any) => {
-        this.handleMovement(JSON.parse(message.body));
-      });
-      this.stompClient.subscribe('/topic/obstacles', (message: any) => {
-        this.handleObstacles(JSON.parse(message.body));
-      });
-      this.joinSession();
-    });
+  joinSession() {
+    if (this.stompClient && this.sessionId) {
+      console.log("Joining session", this.sessionId, this.authService.getUsername());
+      this.stompClient.send('/app/join-session', {}, JSON.stringify({ sessionId: this.sessionId, player: this.authService.getUsername() }));
+    } else {
+      console.error('stompClient is not initialized or sessionId is null');
+    }
+  }
+
+  handleSession(session: any) {
+    this.fetchRoomDetails();
   }
 
   fetchRoomDetails() {
@@ -107,17 +108,6 @@ export class OnlineMultiplayerComponent implements OnInit {
     }
   }
 
-  joinSession() {
-    console.log("se une a la sesion", this.sessionId, this.authService.getUsername());
-    if (this.sessionId) {
-      this.stompClient.send('/app/join-session', {}, JSON.stringify({ sessionId: this.sessionId, player: this.authService.getUsername() }));
-    }
-  }
-
-  handleSession(session: any) {
-    this.fetchRoomDetails();
-  }
-
   startCountdown() {
     this.countdown = 10;
     this.countdownInterval = setInterval(() => {
@@ -129,11 +119,6 @@ export class OnlineMultiplayerComponent implements OnInit {
     }, 1000);
   }
 
-
-  syncObstacles() {
-    const obstaclePositions = this.obstaclesLeft.map(obstacle => obstacle.x);
-    this.stompClient.send('/app/obstacles', {}, JSON.stringify(obstaclePositions));
-  }
 
   handleObstacles(obstaclePositions: number[]) {
     this.obstaclesLeft = [];

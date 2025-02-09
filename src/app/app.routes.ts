@@ -11,6 +11,7 @@ import { SkinsComponent } from './pages/skins/skins.component';
 import { OnlineMultiplayerComponent } from './pixie/online-multiplayer/online-multiplayer.component';
 import { RoomManagerComponent } from './pixie/online-multiplayer/room-manager/room-manager.component';
 import { AuthGuard } from './services/auth.guard';
+import {WaitingRoomComponent} from './pixie/online-multiplayer/waiting-room/waiting-room.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,5 +25,7 @@ export const routes: Routes = [
   { path: 'top-scores', component: TopScoresComponent, canActivate: [AuthGuard] },
   { path: 'skins', component: SkinsComponent, canActivate: [AuthGuard] },
   { path: 'online-multiplayer', component: RoomManagerComponent, canActivate: [AuthGuard] },
-  { path: 'join/:roomId', component: OnlineMultiplayerComponent, canActivate: [AuthGuard] }
+  { path: 'join/:roomId', component: OnlineMultiplayerComponent, canActivate: [AuthGuard] },
+  { path: 'waiting-room/:roomId', component: WaitingRoomComponent },
+  { path: 'game/:roomId', component: OnlineMultiplayerComponent }
 ];

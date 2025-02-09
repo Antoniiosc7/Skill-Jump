@@ -1,0 +1,13 @@
+<!-- src/app/components/waiting-room/waiting-room.component.html -->
+<div class="waiting-room">
+  <h1>Waiting Room: {{ roomName }}</h1>
+  <h2>Players:</h2>
+  <ul>
+    <li *ngFor="let player of players">{{ player }}</li>
+  </ul>
+  <button *ngIf="isCreator" (click)="startGame()">Start Game</button>
+  <button (click)="closeRoom()">Close Room</button>
+  <div *ngIf="countdown < 10">
+    <p>Game starts in {{ countdown }} seconds</p>
+  </div>
+</div>

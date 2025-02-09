@@ -1,0 +1,23 @@
+/* src/app/components/waiting-room/waiting-room.component.css */
+.waiting-room {
+  text-align: center;
+}
+
+.waiting-room h1, .waiting-room h2 {
+  margin: 20px 0;
+}
+
+.waiting-room ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.waiting-room li {
+  margin: 10px 0;
+}
+
+.waiting-room button {
+  margin: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+}

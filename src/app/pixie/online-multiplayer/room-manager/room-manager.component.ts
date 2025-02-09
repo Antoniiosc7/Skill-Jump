@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { NgForOf, NgIf } from '@angular/common';
-import {AuthService} from '../../../services/auth.service';
-import {FormsModule} from '@angular/forms';
-import {FRONT_URL} from '../../../../config';
+import { AuthService } from '../../../services/auth.service';
+import { FormsModule } from '@angular/forms';
+import { FRONT_URL } from '../../../../config';
 
 @Component({
   selector: 'app-room-manager',
@@ -21,7 +21,7 @@ export class RoomManagerComponent implements OnInit {
   filteredRooms: any[] = [];
   inviteLink: string | null = null;
   searchQuery: string = '';
-  username!: string | null; // Replace with actual username logic
+  username!: string | null;
 
   constructor(private router: Router, private apiService: ApiService, private authService: AuthService) {}
 
@@ -40,11 +40,12 @@ export class RoomManagerComponent implements OnInit {
   createRoom() {
     this.apiService.createRoom().subscribe((room: any) => {
       this.inviteLink = `${FRONT_URL}/join/${room.id}`;
+      this.router.navigate([`/waiting-room/${room.id}`]);
     });
   }
 
   joinRoom(roomId: string) {
-    this.router.navigate([`/join/${roomId}`]);
+    this.router.navigate([`/waiting-room/${roomId}`]);
   }
 
   filterRooms() {
