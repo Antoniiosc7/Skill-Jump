@@ -23,6 +23,9 @@ export const routes: Routes = [
   { path: 'profile/:idUsuario', component: ProfileComponent },
   { path: 'top-scores', component: TopScoresComponent, canActivate: [AuthGuard] },
   { path: 'skins', component: SkinsComponent, canActivate: [AuthGuard] },
+  /*
   { path: 'online-multiplayer', component: RoomManagerComponent, canActivate: [AuthGuard] },
   { path: 'join/:roomId', component: OnlineMultiplayerComponent, canActivate: [AuthGuard] }
+  
+   */
 ];

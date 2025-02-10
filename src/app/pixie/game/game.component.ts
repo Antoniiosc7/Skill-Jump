@@ -6,6 +6,8 @@ import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import {ScreenTooSmallComponent} from './screen-too-small/screen-too-small.component';
+import { ConstantesUtil } from '../../../constantes.util';
 
 @Component({
   selector: 'app-game',
@@ -13,7 +15,8 @@ import { AuthService } from '../../services/auth.service';
   imports: [
     GameOverComponent,
     PauseMenuComponent,
-    NgIf
+    NgIf,
+    ScreenTooSmallComponent
   ],
   styleUrls: ['./game.component.css']
 })
@@ -37,10 +40,13 @@ export class GameComponent implements OnInit {
   scoreText!: PIXI.Text;
   elapsedTime = 0;
   username!: any;
+  isScreenTooSmall = false;
+
   constructor(private router: Router, private authService: AuthService, private apiService: ApiService) {}
 
   ngOnInit() {
     this.initializePixi();
+    window.addEventListener('resize', this.onResize.bind(this));
   }
 
   async initializePixi() {
@@ -74,8 +80,32 @@ export class GameComponent implements OnInit {
     }
   }
 
+  onResize() {
+    if (this.app) {
+      this.app.renderer.resize(window.innerWidth - 2, window.innerHeight - 120);
+      if (window.innerHeight < 725) {
+        this.isScreenTooSmall = true;
+      }
 
-
+      if (this.background) {
+        this.background.width = this.app.screen.width;
+        this.background.height = this.app.screen.height;
+      }
+      if (this.groundTiles) {
+        this.groundTiles.width = this.app.screen.width;
+      }
+      if (this.scoreText) {
+        this.scoreText.x = this.app.renderer.width - 20;
+      }
+      if (this.player) {
+        this.player.x = this.app.screen.width / 2;
+        this.player.y = 550; // Adjust this value to match the height of the obstacles
+      }
+      for (const obstacle of this.obstacles) {
+        obstacle.y = 550; // Adjust this value to match the height of the obstacles
+      }
+    }
+  }
 
   async createPlayer() {
     this.username = this.authService.getUsername();
@@ -115,7 +145,7 @@ export class GameComponent implements OnInit {
     let xPosition = 1900;
     for (let i = 0; i < 20; i++) {
       await this.addObstacle(xPosition);
-      xPosition += 200 + Math.random() * 300;
+      xPosition += ConstantesUtil.MIN_OBSTACLE_DISTANCE + Math.random() * 300;
     }
   }
 
@@ -126,6 +156,14 @@ export class GameComponent implements OnInit {
     obstacle.height = 50;
     obstacle.x = xPosition;
     obstacle.y = 550;
+
+    // Ensure the new obstacle is not too close to the previous one
+    if (this.obstacles.length > 0) {
+      const lastObstacle = this.obstacles[this.obstacles.length - 1];
+      if (xPosition - lastObstacle.x < ConstantesUtil.MIN_OBSTACLE_DISTANCE) {
+        obstacle.x = lastObstacle.x + ConstantesUtil.MIN_OBSTACLE_DISTANCE;
+      }
+    }
 
     this.obstacles.push(obstacle);
     this.app.stage.addChild(obstacle);
@@ -164,7 +202,7 @@ export class GameComponent implements OnInit {
   async createBackground() {
     const texture = await PIXI.Assets.load('assets/urbano.webp');
     this.background = new PIXI.TilingSprite({ texture, width: this.app.screen.width, height: this.app.screen.height });
-    this.background.y = -240; // Adjust if you want it to start at a different position
+    this.background.zIndex = 0; // Ensure background is at the lowest z-index
     this.app.stage.addChild(this.background);
   }
 
@@ -176,7 +214,7 @@ export class GameComponent implements OnInit {
   }
 
   gameLoop() {
-    if (this.isGameOver || this.isPaused) return;
+    if (this.isGameOver || this.isPaused || this.isScreenTooSmall) return;
 
     this.elapsedTime += this.app.ticker.deltaMS;
     this.score = Math.floor(this.elapsedTime / 100);
@@ -224,6 +262,9 @@ export class GameComponent implements OnInit {
     this.scoreText.x = this.app.renderer.width - 20;
   }
 
+  onAcknowledgeScreenTooSmall() {
+    this.isScreenTooSmall = false;
+  }
 
   checkCollision(sprite1: PIXI.Sprite, sprite2: PIXI.Sprite): boolean {
     const bounds1 = sprite1.getBounds();

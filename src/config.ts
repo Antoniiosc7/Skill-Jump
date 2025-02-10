@@ -9,4 +9,4 @@ export const API_URL = `${PROTOCOLO}://${BASE_URL}${API_PORT}`;
 export const wsURL = `${API_URL}/ws`;
 export const FRONT_URL = `${PROTOCOLO}://${BASE_URL}${ANGULAR_PORT}`;
 // Version
-export const VERSIONTEXT = "beta angular-pixie game | v.0.0.6"
+export const VERSIONTEXT = "beta angular-pixie game | v.0.1.0"

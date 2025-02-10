@@ -2,3 +2,4 @@
 
 <app-game-over *ngIf="isGameOver" [score]="score" (restart)="onRestart()" (goHome)="onGoHome()"></app-game-over>
 <app-pause-menu *ngIf="isPaused && !isGameOver" (restart)="onRestart()" (continue)="onContinue()" (goHome)="onGoHome()"></app-pause-menu>
+<app-screen-too-small *ngIf="isScreenTooSmall" (acknowledge)="onAcknowledgeScreenTooSmall()"></app-screen-too-small>
