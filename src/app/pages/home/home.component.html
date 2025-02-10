@@ -11,7 +11,10 @@
   <section [ngClass]="{'grayscale': !isLoggedIn, 'tooltip': !isLoggedIn}" class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300" title="Please log in to access this section">
     <h2 class="text-3xl font-semibold text-white mb-4">Play Online with Friends</h2>
     <p class="text-lg text-gray-400 mb-6">Join your friends in an online game and have fun together.</p>
-    <button [disabled]="!isLoggedIn" class="bg-red-600 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+    <!-- <button [disabled]="!isLoggedIn" (click)="navigateToOnlineMultiplayer()" class="bg-red-600 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+      Play Now
+    </button>-->
+    <button [disabled]="true" class="divide-gray-500 hover:divide-gray-500 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
       Play Now
     </button>
   </section>

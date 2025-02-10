@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_URL } from '../../config';
+import { map } from 'rxjs/operators';
 import { RegisterDto } from './models/register-dto.model';
 import { LoginDto } from './models/login-dto.model';
 import { UserScore } from './models/user-score-dto.model';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +16,8 @@ export class ApiService {
   private baseUrl = `${API_URL}/api/auth`;
   private scoresUrl = `${API_URL}/api/scores`;
   private atributos = `${API_URL}/api/user-attributes`;
+  private wsBaseUrl = `${API_URL}/api/online-mp`;
+  private stompClient: any;
 
   constructor(private http: HttpClient) { }
 
@@ -61,4 +66,17 @@ export class ApiService {
     const params = new HttpParams().set('username', username);
     return this.http.get(`${this.atributos}/current-skin`, { params, responseType: 'text' });
   }
+
+  getAvailableRooms(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.wsBaseUrl}/rooms`);
+  }
+
+  createRoom(): Observable<any> {
+    return this.http.post<any>(`${this.wsBaseUrl}/rooms`, {});
+  }
+
+  getRoomDetails(roomId: string): Observable<any> {
+    return this.http.post<any>(`${this.wsBaseUrl}/session`, { sessionId: roomId });
+  }
+
 }
