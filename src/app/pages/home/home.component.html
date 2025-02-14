@@ -11,9 +11,6 @@
   <section [ngClass]="{'grayscale': !isLoggedIn, 'tooltip': !isLoggedIn}" class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300" title="Please log in to access this section">
     <h2 class="text-3xl font-semibold text-white mb-4">Play Online with Friends</h2>
     <p class="text-lg text-gray-400 mb-6">Join your friends in an online game and have fun together.</p>
-    <!-- <button [disabled]="!isLoggedIn" (click)="navigateToOnlineMultiplayer()" class="bg-red-600 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
-      Play Now
-    </button>-->
     <button [disabled]="true" class="divide-gray-500 hover:divide-gray-500 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
       Play Now
     </button>
@@ -26,7 +23,6 @@
       Join Game
     </button>
   </section>
-
   <!-- Top Scores Section -->
   <section [ngClass]="{'grayscale': !isLoggedIn, 'tooltip': !isLoggedIn}" class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300" title="Please log in to access this section">
     <h2 class="text-3xl font-semibold text-white mb-4">Top Scores</h2>
@@ -35,7 +31,6 @@
       View Scores
     </button>
   </section>
-
   <!-- Choose Skins Section -->
   <section [ngClass]="{'grayscale': !isLoggedIn, 'tooltip': !isLoggedIn}" class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300" title="Please log in to access this section">
     <h2 class="text-3xl font-semibold text-white mb-4">Choose Skins</h2>
@@ -44,10 +39,16 @@
       Choose Skins
     </button>
   </section>
-
+  <!-- Store Section -->
+  <section class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300">
+    <h2 class="text-3xl font-semibold text-white mb-4">Store</h2>
+    <p class="text-lg text-gray-400 mb-6">Buy skins for your character.</p>
+    <button (click)="navigateToStore()" class="bg-red-600 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+      Visit Store
+    </button>
+  </section>
   <!-- News Section -->
   <div class="mt-16">
     <app-news></app-news>
   </div>
 </main>
-

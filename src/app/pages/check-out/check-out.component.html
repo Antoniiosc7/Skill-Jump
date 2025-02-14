@@ -1,0 +1,31 @@
+<!-- src/app/pages/check-out/check-out.component.html -->
+<div class="body-page">
+  <ng-container *ngIf="(cartItems$ | async)?.length; else emptyCart">
+    <mat-card *ngFor="let item of cartItems$ | async" class="cart-item">
+      <mat-card-header>
+        <mat-card-title>{{ item.title }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ item.description }}</p>
+        <p class="price">Total Price: {{ item.price | currency:'EUR' }}</p>
+        <mat-form-field appearance="fill">
+          <mat-label>Quantity</mat-label>
+          <mat-select [(value)]="item.quantity" (selectionChange)="updateTotalPrice()">
+            <mat-option *ngFor="let qty of quantities" [value]="qty">{{ qty }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="warn" (click)="removeFromCart(item)">Remove</button>
+      </mat-card-actions>
+    </mat-card>
+    <p class="total-price">Total Price: {{ totalPrice | currency:'EUR' }}</p>
+    <button mat-raised-button color="primary" (click)="completeOrder()">Complete Order</button>
+  </ng-container>
+  <ng-template #emptyCart>
+    <div class="empty-cart-container">
+      <p class="empty-cart-message">Your cart is empty.</p>
+      <button mat-raised-button color="primary" routerLink="/store">Go to Store</button>
+    </div>
+  </ng-template>
+</div>

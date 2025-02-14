@@ -1,0 +1,62 @@
+/* src/app/pages/check-out/check-out.component.css */
+.body-page {
+  padding: 2rem;
+  background-color: #f3f4f6; /* Light Gray */
+  min-height: 82.7vh;
+}
+
+.cart-item {
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mat-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #374151; /* Dark Gray */
+}
+
+.mat-card-content p {
+  margin: 0.5rem 0;
+  color: #4b5563; /* Medium Gray */
+}
+
+.price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1f2937; /* Darker Gray */
+}
+
+.mat-form-field {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.total-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1f2937; /* Darker Gray */
+  text-align: right;
+  margin-top: 1rem;
+}
+
+.empty-cart-container {
+  text-align: center;
+  padding: 2rem;
+  background-color: #e5e7eb; /* Light Gray */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.empty-cart-message {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1f2937; /* Darker Gray */
+  margin-bottom: 1rem;
+}

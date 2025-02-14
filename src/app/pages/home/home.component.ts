@@ -56,4 +56,8 @@ export class HomeComponent implements OnInit {
   navigateToOnlineMultiplayer() {
     this.router.navigate(['/online-multiplayer']);
   }
+
+  navigateToStore() {
+    this.router.navigate(['/store']);
+  }
 }
