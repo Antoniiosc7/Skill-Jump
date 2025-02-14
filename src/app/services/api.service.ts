@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_URL } from '../../config';
-import { map } from 'rxjs/operators';
 import { RegisterDto } from './models/register-dto.model';
 import { LoginDto } from './models/login-dto.model';
 import { UserScore } from './models/user-score-dto.model';
-import SockJS from 'sockjs-client';
-import { Stomp } from '@stomp/stompjs';
+
+import { UserEntity } from './models/user-entity.model';
 
 @Injectable({
   providedIn: 'root'
@@ -79,4 +78,11 @@ export class ApiService {
     return this.http.post<any>(`${this.wsBaseUrl}/session`, { sessionId: roomId });
   }
 
+  getUserProfile(): Observable<UserEntity> {
+    return this.http.get<UserEntity>(`${API_URL}/profile`);
+  }
+
+  updateUserProfile(user: UserEntity): Observable<UserEntity> {
+    return this.http.put<UserEntity>(`${API_URL}/profile`, user);
+  }
 }

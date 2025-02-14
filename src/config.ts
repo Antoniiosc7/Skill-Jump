@@ -10,3 +10,4 @@ export const wsURL = `${API_URL}/ws`;
 export const FRONT_URL = `${PROTOCOLO}://${BASE_URL}${ANGULAR_PORT}`;
 // Version
 export const VERSIONTEXT = "beta angular-pixie game | v.0.1.0"
+export const STRIPE_KEY = environment.STRIPE_KEY;

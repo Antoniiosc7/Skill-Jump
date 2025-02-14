@@ -4,7 +4,8 @@ import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
 import { NgForOf, NgIf, DatePipe } from '@angular/common';
 import { UserScore } from '../../services/models/user-score-dto.model';
-
+import {MatIcon} from '@angular/material/icon';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -12,6 +13,8 @@ import { UserScore } from '../../services/models/user-score-dto.model';
   imports: [
     NgForOf,
     NgIf,
+    MatIcon,
+    DatePipe,
   ],
   styleUrls: ['./profile.component.css']
 })
@@ -22,8 +25,13 @@ export class ProfileComponent implements OnInit {
   topProfiles: UserScore[] = [];
   isLoggedIn: boolean = false;
   achievements: string[] = [];
-
-  constructor(private authService: AuthService, private route: ActivatedRoute, private apiService: ApiService) {}
+  purchases: any[] = [];
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private apiService: ApiService
+  ) {}
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn();
@@ -63,5 +71,9 @@ export class ProfileComponent implements OnInit {
 
   searchUserProfile(username: string) {
     // Implement search logic to find user profile by username
+  }
+
+  editProfile() {
+    this.router.navigate(['/profile/edit']);
   }
 }
