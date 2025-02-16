@@ -16,6 +16,8 @@ import { StoreComponent} from './pages/store/store.component';
 import { SuccessComponent } from './pages/success/success.component';
 import { CancelComponent } from './pages/cancel/cancel.component';
 import {EditComponent} from './pages/profile/edit/edit.component';
+import {NotFoundComponent} from './pages/not-found/not-found.component';
+import {UnauthorizedComponent} from './pages/unauthorized/unauthorized.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -33,6 +35,9 @@ export const routes: Routes = [
   { path: 'check-out', component: CheckOutComponent },
   { path: 'success', component: SuccessComponent },
   { path: 'cancel', component: CancelComponent },
+  { path: '404', component: NotFoundComponent },
+  { path: '401', component: UnauthorizedComponent },
+  { path: '**', redirectTo: '/404' },
   /*
   { path: 'online-multiplayer', component: RoomManagerComponent, canActivate: [AuthGuard] },
   { path: 'join/:roomId', component: OnlineMultiplayerComponent, canActivate: [AuthGuard] }

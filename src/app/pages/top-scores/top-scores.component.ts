@@ -3,12 +3,14 @@ import {NgForOf} from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { UserScore } from '../../services/models/user-score-dto.model';
 import { Router } from '@angular/router';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-top-scores',
   templateUrl: './top-scores.component.html',
   imports: [
-    NgForOf
+    NgForOf,
+    TranslatePipe
   ],
   styleUrls: ['./top-scores.component.css']
 })

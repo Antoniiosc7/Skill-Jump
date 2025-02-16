@@ -1,35 +1,66 @@
-.container {
-  max-width: 800px;
+/* Smooth transitions */
+button {
+  transition: all 0.3s ease;
 }
 
-.podium {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
+/* Gradient animations */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-.podium div {
-  text-align: center;
-  margin: 0 1rem;
+.bg-gradient-animated {
+  background-size: 200% 200%;
+  animation: gradientFlow 15s ease infinite;
 }
 
-.podium .first {
-  background-color: #FFD700;
+/* Card hover effects */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.podium .second {
-  background-color: #C0C0C0;
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-.podium .third {
-  background-color: #CD7F32;
+/* Button hover effects */
+button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.podium div div {
-  margin-top: 0.5rem;
+/* Disabled state styles */
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-.podium .score {
-  font-size: 1.5rem;
-  font-weight: bold;
+/* Glow effect for cards */
+.glow-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glow-effect:hover::after {
+  opacity: 1;
 }
