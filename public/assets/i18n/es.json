@@ -7,24 +7,46 @@
   },
   "HEADER": {
     "TITLE": "Skill Jump",
-    "CART": "Cart",
-    "LOGIN": "Login",
-    "LOGOUT": "Logout",
-    "REGISTER": "Register",
-    "PROFILE": "Profile",
-    "EMPTY_CART": "Empty Cart",
-    "PAY": "Pay",
-    "CART_MSG": "The cart is empty"
+    "CART": "Cesta",
+    "LOGIN": "Iniciar sesión",
+    "LOGOUT": "Cerrar sesión",
+    "REGISTER": "Registrarse",
+    "PROFILE": "Perfil",
+    "EMPTY_CART": "Vaciar cesta",
+    "PAY": "Pagar",
+    "CART_MSG": "La cesta está vacía"
   },
   "FOOTER": {
-    "ALL_RIGHTS_RESERVED": "2024 Skill Jump. All rights reserved.",
-    "MADE": "Made by"
+    "ALL_RIGHTS_RESERVED": "2024 Skill Jump. Todos los derechos reservados.",
+    "MADE": "Hecho por"
   },
   "HOME": {
-    "BLOCK1": {
-      "TITLE": "We Transform Ideas into Digital Reality",
-      "SUBTITLE": "Innovative web design and application development to boost your business",
-      "BUTTON": "Contact Us"
+    "WELCOME": "Bienvenido a Skill Jump",
+    "SUBTITLE": "Desafíate a ti mismo y compite con jugadores de todo el mundo",
+    "SINGLEPLAYER": {
+      "TITLE": "Un jugador",
+      "SUBTITLE": "Desafíate a ti mismo en esta emocionante aventura en solitario",
+      "BUTTON": "Jugar ahora"
+    },
+    "LOCALMULTIPLAYER": {
+      "TITLE": "Multijugador local",
+      "SUBTITLE": "Desafía a tus amigos en el modo multijugador local",
+      "BUTTON": "UNIRSE AL JUEGO"
+    },
+    "MULTIPLAYER": {
+      "TITLE": "Jugar en línea",
+      "SUBTITLE": "Conéctate y juega con amigos en línea",
+      "BUTTON": "Próximamente"
+    },
+    "SCORES": {
+      "TITLE": "Mejores puntuaciones",
+      "SUBTITLE": "Compara tus habilidades con los mejores",
+      "BUTTON": "Ver tabla de clasificación"
+    },
+    "STORE": {
+      "TITLE": "Tienda",
+      "SUBTITLE": "Obtén increíbles skins y potenciadores",
+      "BUTTON": "Visitar tienda"
     }
   },
   "REGISTER": {

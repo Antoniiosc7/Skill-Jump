@@ -1,5 +1,5 @@
 <header class="bg-gradient-to-r from-gray-700 to-gray-900 p-6 shadow-lg flex justify-between items-center">
-  <h1 (click)="navigateToHome()" class="text-4xl font-extrabold text-white text-center drop-shadow-lg cursor-pointer">Skill Jump</h1>
+  <h1 (click)="navigateToHome()" class="text-4xl font-extrabold text-white text-center drop-shadow-lg cursor-pointer">{{ 'HEADER.TITLE' | translate }}</h1>
   <div class="flex items-center space-x-2">
     <button *ngIf="!isLoggedIn" (click)="navigateToLogin()" class="btn-primary">
       {{ 'HEADER.LOGIN' | translate }}
@@ -12,7 +12,7 @@
     </button>
     <button *ngIf="isLoggedIn" mat-button [matMenuTriggerFor]="cartMenu" class="btn-cart">
       <mat-icon>shopping_cart</mat-icon>
-      Cart
+      {{ 'HEADER.CART' | translate }}
     </button>
     <button *ngIf="isLoggedIn" (click)="logout()" class="btn-danger ml-2">
       {{ 'HEADER.LOGOUT' | translate }}
@@ -28,15 +28,15 @@
       </a>
       <button mat-menu-item (click)="clearCart()">
         <mat-icon>delete</mat-icon>
-        <span>Clear</span>
+        <span>{{ 'HEADER.EMPTY_CART' | translate }}</span>
       </button>
       <button mat-menu-item (click)="checkout()">
         <mat-icon>payment</mat-icon>
-        <span>Checkout</span>
+        <span>{{ 'HEADER.PAY' | translate }}</span>
       </button>
     </ng-container>
     <ng-template #emptyCart>
-      <span class="empty-cart">Your cart is empty</span>
+      <span class="empty-cart">{{ 'HEADER.CART_MSG' | translate }}</span>
     </ng-template>
   </mat-menu>
 </header>

@@ -21,10 +21,32 @@
     "MADE": "Made by"
   },
   "HOME": {
-    "BLOCK1": {
-      "TITLE": "We Transform Ideas into Digital Reality",
-      "SUBTITLE": "Innovative web design and application development to boost your business",
-      "BUTTON": "Contact Us"
+    "WELCOME": "Welcome to Skill Jump",
+    "SUBTITLE": "Challenge yourself and compete with players worldwide",
+    "SINGLEPLAYER": {
+      "TITLE": "Single Player",
+      "SUBTITLE": "Challenge yourself in this exciting solo adventure",
+      "BUTTON": "Play Now"
+    },
+    "LOCALMULTIPLAYER": {
+      "TITLE": "Local Multiplayer",
+      "SUBTITLE": "Challenge your friends in local multiplayer mode",
+      "BUTTON": "JOIN GAME"
+    },
+    "MULTIPLAYER": {
+      "TITLE": "Play Online",
+      "SUBTITLE": "Connect and play with friends online",
+      "BUTTON": "Coming Soon"
+    },
+    "SCORES": {
+      "TITLE": "Top Scores",
+      "SUBTITLE": "Compare your skills with the best",
+      "BUTTON": "View Leaderboard"
+    },
+    "STORE": {
+      "TITLE": "Store",
+      "SUBTITLE": "Get awesome skins and power-ups",
+      "BUTTON": "Visit Store"
     }
   },
   "REGISTER": {

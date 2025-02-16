@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_URL } from '../../config';
 import { RegisterDto } from './models/register-dto.model';
 import { LoginDto } from './models/login-dto.model';
 import { UserScore } from './models/user-score-dto.model';
-
 import { UserEntity } from './models/user-entity.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export class ApiService implements OnDestroy {
   private baseUrl = `${API_URL}/api/auth`;
   private scoresUrl = `${API_URL}/api/scores`;
   private atributos = `${API_URL}/api/user-attributes`;
@@ -84,5 +83,12 @@ export class ApiService {
 
   updateUserProfile(user: UserEntity): Observable<UserEntity> {
     return this.http.put<UserEntity>(`${API_URL}/profile`, user);
+  }
+
+  ngOnDestroy() {
+    // Limpiar cualquier recurso que pueda estar causando problemas de rendimiento
+    if (this.stompClient) {
+      this.stompClient.disconnect();
+    }
   }
 }

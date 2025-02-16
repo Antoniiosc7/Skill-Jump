@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import {Component, OnInit, ElementRef, ViewChild, OnDestroy} from '@angular/core';
 import * as PIXI from 'pixi.js';
 import { GameOverComponent } from './game-over/game-over.component';
 import { PauseMenuComponent } from './pause-menu/pause-menu.component';
@@ -8,6 +8,7 @@ import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import {ScreenTooSmallComponent} from './screen-too-small/screen-too-small.component';
 import { ConstantesUtil } from '../../../constantes.util';
+import { isWebGLSupported } from '@pixi/utils';
 
 @Component({
   selector: 'app-game',
@@ -20,7 +21,7 @@ import { ConstantesUtil } from '../../../constantes.util';
   ],
   styleUrls: ['./game.component.css']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
   @ViewChild('gameContainer', { static: true }) gameContainer!: ElementRef;
   @ViewChild(GameOverComponent) gameOverComponent!: GameOverComponent;
   app!: PIXI.Application;
@@ -49,9 +50,19 @@ export class GameComponent implements OnInit {
     window.addEventListener('resize', this.onResize.bind(this));
   }
 
+  ngOnDestroy() {
+    this.cleanUpPixi();
+    window.removeEventListener('resize', this.onResize.bind(this));
+  }
+
   async initializePixi() {
     if (!this.gameContainer) {
       console.error('Game container not found');
+      return;
+    }
+
+    if (!isWebGLSupported()) {
+      console.error('WebGL is not supported in this browser.');
       return;
     }
 
@@ -61,13 +72,16 @@ export class GameComponent implements OnInit {
         width: window.innerWidth - 2,
         height: window.innerHeight - 120,
         backgroundColor: 0x1099bb,
+        antialias: true,
+        resolution: window.devicePixelRatio || 1,
+        autoDensity: true,
+        powerPreference: 'high-performance',
       });
 
       this.gameContainer.nativeElement.appendChild(this.app.canvas);
       await this.createBackground();
       await this.createGround();
       await this.createPlayer(); // Ensure createPlayer is awaited
-
 
       this.createObstacles();
       this.createScoreText();
@@ -324,5 +338,27 @@ export class GameComponent implements OnInit {
 
   onGoHome() {
     this.router.navigate(['']);
+  }
+
+  cleanUpPixi() {
+    if (this.app) {
+      // Destruir todos los objetos creados
+      this.player?.destroy();
+      this.ground?.destroy();
+      this.obstacles.forEach(obstacle => obstacle?.destroy());
+      this.groundTiles?.destroy();
+      this.background?.destroy();
+      this.scoreText?.destroy();
+
+      // Destruir la aplicación PIXI
+      this.app.destroy(true, { children: true, texture: true });
+    }
+
+    // Limpiar la caché de Pixi
+    PIXI.Assets.cache.reset();
+
+    // Eliminar eventos
+    window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener('resize', this.onResize);
   }
 }

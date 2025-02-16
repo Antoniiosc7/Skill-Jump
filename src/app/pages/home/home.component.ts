@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
 import { AuthService } from '../../services/auth.service';
 import { NewsComponent } from './news/news.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,7 @@ import { NewsComponent } from './news/news.component';
   imports: [
     NgClass,
     NewsComponent,
+    TranslatePipe,
   ],
   standalone: true,
   styleUrls: ['./home.component.css']

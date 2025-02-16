@@ -20,6 +20,8 @@
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
+    "@ngx-translate/http-loader": "^16.0.1",
+    "@pixi/utils": "^7.4.2",
     "@stomp/stompjs": "^7.0.0",
     "ngx-stripe": "^19.0.0",
     "pixi.js": "^8.6.1",
