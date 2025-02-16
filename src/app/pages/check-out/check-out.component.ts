@@ -1,4 +1,3 @@
-// src/app/pages/check-out/check-out.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
@@ -14,28 +13,28 @@ import { API_URL } from '../../../config';
 import { ServiceDTO } from '../../services/models/service.dto';
 import { CartService } from '../../services/cart.service';
 import { PlatformService } from '../../services/platform.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-check-out',
   standalone: true,
   imports: [
     MatLabel,
-    MatCardTitle,
     HttpClientModule,
     StripeModule,
     CurrencyPipe,
     MatFormField,
     MatSelect,
     MatOption,
-    MatCardActions,
-    MatCardContent,
-    MatCardHeader,
-    MatCard,
     NgForOf,
     NgIf,
-    MatButton,
     RouterLink,
     AsyncPipe,
+    MatIconModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './check-out.component.html',
   styleUrls: ['./check-out.component.css']
@@ -44,6 +43,7 @@ export class CheckOutComponent implements OnInit {
   cartItems$: Observable<ServiceDTO[]>;
   totalPrice: number = 0;
   quantities: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  isProcessing: boolean = false;
 
   constructor(
     private cartService: CartService,
@@ -72,24 +72,49 @@ export class CheckOutComponent implements OnInit {
     this.updateTotalPrice();
   }
 
-  completeOrder() {
-    this.cartItems$.subscribe(items => {
-      const lineItems = items.map(item => ({
-        title: item.title,
-        description: item.description,
-        price: item.price,
-        quantity: item.quantity
-      }));
+  async completeOrder() {
+    if (this.isProcessing) return;
 
-      this.http.post(`${API_URL}/api/stripe/create-checkout-session`, lineItems)
-        .subscribe((session: any) => {
-          this.stripeService.redirectToCheckout({ sessionId: session.id })
-            .subscribe(result => {
-              if (result.error) {
-                console.error('Error redirecting to Stripe:', result.error.message);
-              }
-            });
-        });
-    });
+    this.isProcessing = true;
+    try {
+      this.cartItems$.subscribe(items => {
+        const lineItems = items.map(item => ({
+          title: item.title,
+          description: item.description,
+          price: item.price,
+          quantity: item.quantity
+        }));
+
+        this.http.post(`${API_URL}/api/stripe/create-checkout-session`, lineItems)
+          .subscribe({
+            next: (session: any) => {
+              this.stripeService.redirectToCheckout({ sessionId: session.id })
+                .subscribe({
+                  next: (result) => {
+                    if (result.error) {
+                      console.error('Error redirecting to Stripe:', result.error.message);
+                      this.isProcessing = false;
+                    }
+                  },
+                  error: (error) => {
+                    console.error('Stripe redirect error:', error);
+                    this.isProcessing = false;
+                  }
+                });
+            },
+            error: (error) => {
+              console.error('Session creation error:', error);
+              this.isProcessing = false;
+            }
+          });
+      });
+    } catch (error) {
+      console.error('Order processing error:', error);
+      this.isProcessing = false;
+    }
+  }
+
+  getItemSubtotal(item: ServiceDTO): number {
+    return item.price * (item.quantity || 1);
   }
 }

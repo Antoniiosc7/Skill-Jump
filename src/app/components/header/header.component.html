@@ -2,20 +2,20 @@
   <h1 (click)="navigateToHome()" class="text-4xl font-extrabold text-white text-center drop-shadow-lg cursor-pointer">Skill Jump</h1>
   <div class="flex items-center space-x-2">
     <button *ngIf="!isLoggedIn" (click)="navigateToLogin()" class="btn-primary">
-      Login
+      {{ 'HEADER.LOGIN' | translate }}
     </button>
     <button *ngIf="!isLoggedIn" (click)="navigateToRegister()" class="btn-secondary">
-      Register
+      {{ 'HEADER.REGISTER' | translate }}
     </button>
     <button *ngIf="isLoggedIn" (click)="navigateToProfile()" class="btn-primary">
-      My Profile
+      {{ 'HEADER.PROFILE' | translate }}
     </button>
     <button *ngIf="isLoggedIn" mat-button [matMenuTriggerFor]="cartMenu" class="btn-cart">
       <mat-icon>shopping_cart</mat-icon>
       Cart
     </button>
     <button *ngIf="isLoggedIn" (click)="logout()" class="btn-danger ml-2">
-      Logout
+      {{ 'HEADER.LOGOUT' | translate }}
     </button>
   </div>
   <mat-menu #cartMenu="matMenu">

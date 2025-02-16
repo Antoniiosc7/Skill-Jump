@@ -1,21 +1,85 @@
-<main class="container mx-auto p-6 space-y-8">
-  <section class="p-8 bg-gray-800 rounded-lg shadow-2xl transform hover:scale-105 transition duration-300">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-3xl font-semibold text-white">Store</h2>
-      <button routerLink="/check-out" class="bg-green-600 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-full shadow-md transform hover:scale-105 transition duration-300">
+<div class="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="container mx-auto max-w-7xl">
+    <!-- Store Header -->
+    <div class="flex justify-between items-center mb-12">
+      <div>
+        <h1 class="text-4xl font-bold text-white mb-2">Store</h1>
+        <p class="text-gray-400">Customize your character with unique skins</p>
+      </div>
+      <button routerLink="/check-out"
+              class="relative inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all duration-300 group">
+        <mat-icon class="mr-2">shopping_cart</mat-icon>
         View Cart
+        <span *ngIf="getCartItemCount() > 0"
+              class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-sm font-bold">
+          {{getCartItemCount()}}
+        </span>
+        <div class="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
       </button>
     </div>
-    <p class="text-lg text-gray-400 mb-6">Buy skins for your character.</p>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div *ngFor="let skin of skins" class="bg-gray-700 p-4 rounded-lg shadow-lg text-center">
-        <img [src]="skin.imageUrl" alt="{{skin.name}}" class="w-full h-48 object-cover mb-4 rounded">
-        <h3 class="text-xl font-semibold text-white mb-2">{{skin.name}}</h3>
-        <p class="text-lg text-gray-400 mb-4">{{skin?.price}} coins</p>
-        <button (click)="buySkin(skin)" class="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full shadow-md transform hover:scale-105 transition duration-300">
-          Buy
-        </button>
+
+    <!-- Store Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Skins Grid -->
+      <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div *ngFor="let skin of skins"
+             (click)="selectSkin(skin)"
+             class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800 to-gray-700 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
+          <!-- Skin Image -->
+          <div class="relative aspect-square overflow-hidden">
+            <img [src]="skin.imageUrl"
+                 [alt]="skin.name"
+                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          </div>
+
+          <!-- Skin Info -->
+          <div class="absolute bottom-0 left-0 right-0 p-6">
+            <h3 class="text-xl font-bold text-white mb-1">{{skin.name}}</h3>
+            <p [class]="'text-sm font-semibold mb-2 ' + getRarityColor(skin.rarity)">
+              {{skin.rarity}}
+            </p>
+            <div class="flex items-center justify-between">
+              <span class="text-yellow-400 font-bold">{{skin.price}} coins</span>
+              <button (click)="buySkin(skin); $event.stopPropagation()"
+                      class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skin Details Panel -->
+      <div class="lg:col-span-1">
+        <div class="sticky top-8">
+          <div *ngIf="selectedSkin; else selectSkinPrompt"
+               class="bg-gradient-to-br from-gray-800 to-gray-700 rounded-2xl p-6 shadow-xl">
+            <h2 class="text-2xl font-bold text-white mb-4">{{selectedSkin.name}}</h2>
+            <img [src]="selectedSkin.imageUrl"
+                 [alt]="selectedSkin.name"
+                 class="w-full aspect-square object-cover rounded-xl mb-4">
+            <p [class]="'text-sm font-semibold mb-2 ' + getRarityColor(selectedSkin.rarity)">
+              {{selectedSkin.rarity}}
+            </p>
+            <p class="text-gray-300 mb-4">{{selectedSkin.description}}</p>
+            <div class="flex items-center justify-between">
+              <span class="text-2xl font-bold text-yellow-400">{{selectedSkin.price}} coins</span>
+              <button (click)="buySkin(selectedSkin)"
+                      class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105">
+                Add to Cart
+              </button>
+            </div>
+          </div>
+          <ng-template #selectSkinPrompt>
+            <div class="bg-gradient-to-br from-gray-800 to-gray-700 rounded-2xl p-6 shadow-xl text-center">
+              <mat-icon class="text-gray-600 text-6xl mb-4">store</mat-icon>
+              <h2 class="text-xl font-semibold text-white mb-2">Select a Skin</h2>
+              <p class="text-gray-400">Click on any skin to view its details</p>
+            </div>
+          </ng-template>
+        </div>
       </div>
     </div>
-  </section>
-</main>
+  </div>
+</div>

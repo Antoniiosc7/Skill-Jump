@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy} from '@angular/core';
 import * as PIXI from 'pixi.js';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ import { ApiService } from '../../services/api.service';
   ],
   styleUrls: ['./multiplayer-game.component.css']
 })
-export class MultiplayerGameComponent implements OnInit {
+export class MultiplayerGameComponent implements OnInit, OnDestroy {
   @ViewChild('gameContainer', { static: true }) gameContainer!: ElementRef;
   @ViewChild(GameOverComponent) gameOverComponent!: GameOverComponent;
   appLeft!: PIXI.Application;
@@ -55,6 +55,10 @@ export class MultiplayerGameComponent implements OnInit {
 
   ngOnInit() {
     this.initializePixi();
+  }
+
+  ngOnDestroy() {
+    this.cleanUpPixi();
   }
 
   async initializePixi() {
@@ -390,4 +394,19 @@ export class MultiplayerGameComponent implements OnInit {
   onGoHome() {
     this.router.navigate(['']);
   }
+
+  cleanUpPixi() {
+    if (this.appLeft) {
+      this.appLeft.destroy(true, { children: true, texture: true });
+    }
+    if (this.appRight) {
+      this.appRight.destroy(true, { children: true, texture: true });
+    }
+
+    // Limpiar la caché de Pixi
+    PIXI.Assets.cache.reset();
+
+    window.removeEventListener('keydown', (e) => this.handleKeyDown(e));
+  }
+
 }

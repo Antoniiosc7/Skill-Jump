@@ -9,7 +9,7 @@ import {Observable} from 'rxjs';
 import {MatIcon} from '@angular/material/icon';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatButton, MatIconButton} from '@angular/material/button';
-
+import {TranslateModule} from "@ngx-translate/core";
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -22,7 +22,8 @@ import {MatButton, MatIconButton} from '@angular/material/button';
     MatIconButton,
     NgForOf,
     MatMenuTrigger,
-    MatButton
+    MatButton,
+    TranslateModule
   ],
   standalone: true,
   styleUrls: ['./header.component.css']

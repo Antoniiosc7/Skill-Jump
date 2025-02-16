@@ -4,8 +4,9 @@ import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
 import { NgForOf, NgIf, DatePipe } from '@angular/common';
 import { UserScore } from '../../services/models/user-score-dto.model';
-import {MatIcon} from '@angular/material/icon';
+import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -26,6 +27,7 @@ export class ProfileComponent implements OnInit {
   isLoggedIn: boolean = false;
   achievements: string[] = [];
   purchases: any[] = [];
+
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -47,30 +49,34 @@ export class ProfileComponent implements OnInit {
 
   loadUserProfile(idUsuario: string) {
     this.username = `${idUsuario}`;
-    this.apiService.getTop10User(this.username!).subscribe(
-      (scores: UserScore[]) => {
+    this.apiService.getTop10User(this.username!).subscribe({
+      next: (scores: UserScore[]) => {
         this.topScores = scores;
-        this.achievements = scores.map(score => `Score: ${score.score} on ${new Date(score.date).toLocaleDateString()} at ${new Date(score.date).toLocaleTimeString()}`);
+        this.achievements = scores.map(score =>
+          `Score: ${score.score} on ${new Date(score.date).toLocaleDateString()} at ${new Date(score.date).toLocaleTimeString()}`
+        );
       },
-      error => {
+      error: (error) => {
         console.error('Error fetching top scores', error);
       }
-    );
+    });
   }
 
   loadTopProfiles() {
-    this.apiService.getTop10Month().subscribe(
-      (profiles: UserScore[]) => {
+    this.apiService.getTop10Month().subscribe({
+      next: (profiles: UserScore[]) => {
         this.topProfiles = profiles;
       },
-      error => {
+      error: (error) => {
         console.error('Error fetching top profiles', error);
       }
-    );
+    });
   }
 
   searchUserProfile(username: string) {
-    // Implement search logic to find user profile by username
+    if (username.trim()) {
+      this.router.navigate(['/profile', username]);
+    }
   }
 
   editProfile() {

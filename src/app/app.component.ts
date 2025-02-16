@@ -6,6 +6,8 @@ import { Title } from '@angular/platform-browser';
 import {HeaderComponent} from './components/header/header.component';
 import {FooterComponent} from './components/footer/footer.component';
 import {NgIf} from '@angular/common';
+import {TranslateService} from '@ngx-translate/core';
+import {PlatformService} from './services/platform.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +20,8 @@ export class AppComponent implements OnInit {
   title = 'Skill Jump';
   showFooter = true;
 
-  constructor(private titleService: Title, private router: Router) {}
+  constructor(private titleService: Title, private router: Router,    private platformService: PlatformService,
+              private translate: TranslateService) {}
 
   ngOnInit(): void {
     this.titleService.setTitle(this.title);
@@ -27,5 +30,9 @@ export class AppComponent implements OnInit {
         this.showFooter = event.url !== '/game' &&  event.url !== '/multiplayer';
       }
     });
+    this.translate.setDefaultLang('es');
+    const browserLang = this.translate.getBrowserLang() || 'es';
+    this.translate.use(browserLang.match(/en|es/) ? browserLang : 'es');
+
   }
 }

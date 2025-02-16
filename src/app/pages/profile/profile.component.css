@@ -1,0 +1,46 @@
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:host {
+  display: block;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Custom scrollbar for achievement and purchase lists */
+.space-y-3 {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #93C5FD transparent;
+}
+
+.space-y-3::-webkit-scrollbar {
+  width: 6px;
+}
+
+.space-y-3::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.space-y-3::-webkit-scrollbar-thumb {
+  background-color: #93C5FD;
+  border-radius: 3px;
+}
+
+/* Hover effects */
+.hover\:shadow-md {
+  transition: all 0.2s ease-in-out;
+}
+
+.hover\:shadow-md:hover {
+  transform: translateY(-2px);
+}

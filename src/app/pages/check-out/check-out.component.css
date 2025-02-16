@@ -1,62 +1,93 @@
-/* src/app/pages/check-out/check-out.component.css */
-.body-page {
-  padding: 2rem;
-  background-color: #f3f4f6; /* Light Gray */
-  min-height: 82.7vh;
+/* Material overrides */
+::ng-deep .mat-mdc-form-field {
+  width: 120px;
 }
 
+::ng-deep .mat-mdc-form-field-flex {
+  background-color: rgba(55, 65, 81, 0.5) !important;
+  border-radius: 0.5rem !important;
+}
+
+::ng-deep .mat-mdc-form-field-infix {
+  padding: 0.5rem 0 !important;
+}
+
+::ng-deep .mat-mdc-select-value-text {
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-form-field-label {
+  color: #9CA3AF !important;
+}
+
+::ng-deep .mat-mdc-select-arrow {
+  color: #9CA3AF !important;
+}
+
+::ng-deep .mat-mdc-select-panel {
+  background-color: #1F2937 !important;
+  border-radius: 0.5rem !important;
+}
+
+::ng-deep .mat-mdc-option {
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-option:hover:not(.mat-mdc-option-disabled) {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+::ng-deep .mat-mdc-option.mat-mdc-selected:not(.mat-mdc-option-multiple):not(.mat-mdc-option-disabled) {
+  background-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:host {
+  display: block;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Cart item hover effects */
 .cart-item {
-  margin-bottom: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.mat-card-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #374151; /* Dark Gray */
+.cart-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2),
+  0 10px 10px -5px rgba(0, 0, 0, 0.1);
 }
 
-.mat-card-content p {
-  margin: 0.5rem 0;
-  color: #4b5563; /* Medium Gray */
+/* Button hover effects */
+button:not(:disabled) {
+  transition: all 0.2s ease;
 }
 
-.price {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #1f2937; /* Darker Gray */
+button:not(:disabled):hover {
+  transform: translateY(-2px);
 }
 
-.mat-form-field {
-  width: 100%;
-  margin-top: 1rem;
+/* Loading spinner styles */
+::ng-deep .mat-mdc-progress-spinner circle {
+  stroke: #ffffff !important;
+}
+::ng-deep .quantity-select {
+  width: 100% !important;
 }
 
-.mat-card-actions {
+::ng-deep .mat-mdc-form-field-infix {
+  width: 100% !important;
   display: flex;
-  justify-content: flex-end;
-}
-
-.total-price {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #1f2937; /* Darker Gray */
-  text-align: right;
-  margin-top: 1rem;
-}
-
-.empty-cart-container {
-  text-align: center;
-  padding: 2rem;
-  background-color: #e5e7eb; /* Light Gray */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.empty-cart-message {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #1f2937; /* Darker Gray */
-  margin-bottom: 1rem;
+  align-items: center;
 }

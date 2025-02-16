@@ -19,7 +19,11 @@ import { NewsComponent } from './news/news.component';
 export class HomeComponent implements OnInit {
   isLoggedIn = false;
 
-  constructor(private router: Router, private dialog: MatDialog, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private dialog: MatDialog,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn();

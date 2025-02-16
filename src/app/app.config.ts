@@ -4,11 +4,15 @@ import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {provideClientHydration} from '@angular/platform-browser';
+import {translationProviders} from './services/translations.config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(),
-    importProvidersFrom(FormsModule), provideAnimationsAsync()
+    ...translationProviders, provideClientHydration(),
+    importProvidersFrom(FormsModule), provideAnimationsAsync(),
+
   ]
 };

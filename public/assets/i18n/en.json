@@ -1,0 +1,88 @@
+{
+  "COMMON": {
+    "CLOSE": "close"
+  },
+  "ABOUT": {
+    "TITLE": "About what"
+  },
+  "HEADER": {
+    "TITLE": "Skill Jump",
+    "CART": "Cart",
+    "LOGIN": "Login",
+    "LOGOUT": "Logout",
+    "REGISTER": "Register",
+    "PROFILE": "Profile",
+    "EMPTY_CART": "Empty Cart",
+    "PAY": "Pay",
+    "CART_MSG": "The cart is empty"
+  },
+  "FOOTER": {
+    "ALL_RIGHTS_RESERVED": "2024 Skill Jump. All rights reserved.",
+    "MADE": "Made by"
+  },
+  "HOME": {
+    "BLOCK1": {
+      "TITLE": "We Transform Ideas into Digital Reality",
+      "SUBTITLE": "Innovative web design and application development to boost your business",
+      "BUTTON": "Contact Us"
+    }
+  },
+  "REGISTER": {
+    "TITLE": "Sign Up",
+    "USERNAME_LABEL": "Username",
+    "USERNAME_PLACEHOLDER": "Username",
+    "USERNAME_REQUIRED": "Username is required.",
+    "PASSWORD_LABEL": "Password",
+    "PASSWORD_PLACEHOLDER": "Enter your password",
+    "PASSWORD_REQUIRED": "Password is required.",
+    "PASSWORD_MINLENGTH": "Password must be at least 6 characters long.",
+    "FIRSTNAME_LABEL": "First Name",
+    "FIRSTNAME_PLACEHOLDER": "Your first name",
+    "FIRSTNAME_REQUIRED": "First name is required.",
+    "LASTNAME_LABEL": "Last Name",
+    "LASTNAME_PLACEHOLDER": "Your last name",
+    "LASTNAME_REQUIRED": "Last name is required.",
+    "EMAIL_LABEL": "Email Address",
+    "EMAIL_PLACEHOLDER": "Your email address",
+    "EMAIL_REQUIRED": "Email address is required.",
+    "EMAIL_INVALID": "The email format is invalid.",
+    "SUBMIT_BUTTON": "Sign Up",
+    "SUCCESS_MESSAGE": "Registration successful!",
+    "ERROR_MESSAGE": "There was an error during registration."
+  },
+  "LOGIN": {
+    "TITLE": "Log in",
+    "USERNAME_LABEL": "Username",
+    "USERNAME_PLACEHOLDER": "Enter your username",
+    "PASSWORD_LABEL": "Password",
+    "PASSWORD_PLACEHOLDER": "Enter your password",
+    "SUBMIT_BUTTON": "Log in",
+    "NO_ACCOUNT": "Don't have an account?",
+    "CREATE_ACCOUNT": "Create an account",
+    "FORGOT_PASSWORD": "Forgot your password?",
+    "RESET_PASSWORD": "Reset password"
+  },
+  "CART": {
+    "ITEM_UNITS_LABEL": "Units",
+    "REMOVE_BUTTON": "Remove",
+    "TOTAL_PRICE": "Total Price",
+    "COMPLETE_ORDER_BUTTON": "Complete Order",
+    "EMPTY_MESSAGE": "The cart is empty.",
+    "EMPTY_ACTION": "Hire Services"
+  },
+  "NOT_FOUND": {
+    "ERROR_CODE": "ERROR 404",
+    "ERROR_MESSAGE": "Page Not Found",
+    "ERROR_DESCRIPTION": "Sorry, the page you are looking for does not exist.",
+    "ERROR_HUMOR": "But don't worry, here's a map to find yourself:",
+    "MAP_ALT": "Map of the wineries in Jerez",
+    "HOME_LINK": "Return to the main page"
+  },
+  "USER_PROFILE": {
+    "TITLE": "User Profile",
+    "NAME_LABEL": "First Name",
+    "LASTNAME_LABEL": "Last Name",
+    "EMAIL_LABEL": "Email",
+    "LOADING": "Loading profile..."
+  }
+}
