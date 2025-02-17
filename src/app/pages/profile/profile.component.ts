@@ -6,6 +6,7 @@ import { NgForOf, NgIf, DatePipe } from '@angular/common';
 import { UserScore } from '../../services/models/user-score-dto.model';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +17,7 @@ import { Router } from '@angular/router';
     NgIf,
     MatIcon,
     DatePipe,
+    TranslatePipe,
   ],
   styleUrls: ['./profile.component.css']
 })

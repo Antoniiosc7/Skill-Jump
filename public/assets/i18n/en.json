@@ -49,29 +49,6 @@
       "BUTTON": "Visit Store"
     }
   },
-  "REGISTER": {
-    "TITLE": "Sign Up",
-    "USERNAME_LABEL": "Username",
-    "USERNAME_PLACEHOLDER": "Username",
-    "USERNAME_REQUIRED": "Username is required.",
-    "PASSWORD_LABEL": "Password",
-    "PASSWORD_PLACEHOLDER": "Enter your password",
-    "PASSWORD_REQUIRED": "Password is required.",
-    "PASSWORD_MINLENGTH": "Password must be at least 6 characters long.",
-    "FIRSTNAME_LABEL": "First Name",
-    "FIRSTNAME_PLACEHOLDER": "Your first name",
-    "FIRSTNAME_REQUIRED": "First name is required.",
-    "LASTNAME_LABEL": "Last Name",
-    "LASTNAME_PLACEHOLDER": "Your last name",
-    "LASTNAME_REQUIRED": "Last name is required.",
-    "EMAIL_LABEL": "Email Address",
-    "EMAIL_PLACEHOLDER": "Your email address",
-    "EMAIL_REQUIRED": "Email address is required.",
-    "EMAIL_INVALID": "The email format is invalid.",
-    "SUBMIT_BUTTON": "Sign Up",
-    "SUCCESS_MESSAGE": "Registration successful!",
-    "ERROR_MESSAGE": "There was an error during registration."
-  },
   "LOGIN": {
     "TITLE": "Log in",
     "USERNAME_LABEL": "Username",
@@ -82,7 +59,8 @@
     "NO_ACCOUNT": "Don't have an account?",
     "CREATE_ACCOUNT": "Create an account",
     "FORGOT_PASSWORD": "Forgot your password?",
-    "RESET_PASSWORD": "Reset password"
+    "RESET_PASSWORD": "Reset password",
+    "REGISTER_LINK": "Don't have an account?"
   },
   "CART": {
     "ITEM_UNITS_LABEL": "Units",
@@ -101,10 +79,38 @@
     "HOME_LINK": "Return to the main page"
   },
   "USER_PROFILE": {
-    "TITLE": "User Profile",
-    "NAME_LABEL": "First Name",
+    "TITLE": "Profile",
+    "USERNAME_LABEL": "Username",
+    "EDIT": "Edit Profile",
+    "ACHIEVEMENTS": "Achievements",
+    "PURCHASES": "Purchases",
+    "SEARCH_USER": "Search User",
+    "TOPS": "Top Profiles",
+    "POINTS": "points"
+  },
+  "REGISTER": {
+    "TITLE": "Sign Up",
+    "USERNAME_LABEL": "Username",
     "LASTNAME_LABEL": "Last Name",
-    "EMAIL_LABEL": "Email",
-    "LOADING": "Loading profile..."
+    "USERNAME_PLACEHOLDER": "Username",
+    "USERNAME_REQUIRED": "Username is required.",
+    "PASSWORD_LABEL": "Password",
+    "PASSWORD_PLACEHOLDER": "Enter your password",
+    "PASSWORD_REQUIRED": "Password is required.",
+    "PASSWORD_MINLENGTH": "Password must be at least 6 characters long.",
+    "FIRSTNAME_LABEL": "First Name",
+    "FIRSTNAME_PLACEHOLDER": "Your first name",
+    "FIRSTNAME_REQUIRED": "First name is required.",
+    "LASTNAME_PLACEHOLDER": "Your last name",
+    "LASTNAME_REQUIRED": "Last name is required.",
+    "EMAIL_LABEL": "Email Address",
+    "PASSWORD_CONFIRM_LABEL": "Confirm Password",
+    "EMAIL_PLACEHOLDER": "Your email address",
+    "EMAIL_REQUIRED": "Email address is required.",
+    "EMAIL_INVALID": "The email format is invalid.",
+    "SUBMIT_BUTTON": "Sign Up",
+    "SUCCESS_MESSAGE": "Registration successful!",
+    "ERROR_MESSAGE": "There was an error during registration.",
+    "LOGIN_LINK": "Already have an account?"
   }
 }

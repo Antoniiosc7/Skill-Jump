@@ -3,7 +3,7 @@
     <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
       <!-- Header -->
       <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-8">
-        <h2 class="text-4xl font-bold text-center text-white mb-4">Profile</h2>
+        <h2 class="text-4xl font-bold text-center text-white mb-4">{{ 'USER_PROFILE.TITLE' | translate }}</h2>
       </div>
 
       <!-- Profile Content -->
@@ -13,13 +13,13 @@
           <div class="bg-white rounded-2xl border border-gray-200 shadow-lg p-6 mb-8">
             <div class="flex items-center justify-between flex-wrap gap-4">
               <div class="flex-1">
-                <label class="block text-gray-600 text-sm font-medium mb-1">Username</label>
+                <label class="block text-gray-600 text-sm font-medium mb-1">{{ 'USER_PROFILE.USERNAME_LABEL' | translate }}</label>
                 <p class="text-2xl font-bold text-gray-800">{{ username }}</p>
               </div>
               <button (click)="editProfile()"
                       class="inline-flex items-center px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-medium rounded-xl transition-colors duration-200 transform hover:scale-105">
                 <mat-icon class="mr-2">edit</mat-icon>
-                Edit Profile
+                {{ 'USER_PROFILE.EDIT' | translate }}
               </button>
             </div>
           </div>
@@ -28,7 +28,7 @@
           <div class="bg-white rounded-2xl border border-gray-200 shadow-lg p-6 mb-8">
             <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
               <mat-icon class="mr-2 text-yellow-500">emoji_events</mat-icon>
-              Achievements
+              {{ 'USER_PROFILE.ACHIEVEMENTS' | translate }}
             </h3>
             <div class="space-y-3">
               <div *ngFor="let achievement of achievements"
@@ -42,7 +42,7 @@
           <div class="bg-white rounded-2xl border border-gray-200 shadow-lg p-6">
             <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
               <mat-icon class="mr-2 text-green-500">shopping_bag</mat-icon>
-              Purchases
+              {{ 'USER_PROFILE.PURCHASES' | translate }}
             </h3>
             <div class="space-y-3">
               <div *ngFor="let purchase of purchases"
@@ -62,7 +62,7 @@
           <div class="bg-white rounded-2xl border border-gray-200 shadow-lg p-6 mb-8">
             <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
               <mat-icon class="mr-2 text-blue-500">search</mat-icon>
-              Search User
+              {{ 'USER_PROFILE.SEARCH_USER' | translate }}
             </h3>
             <div class="flex gap-4">
               <input type="text"
@@ -71,7 +71,7 @@
                      placeholder="Enter username...">
               <button (click)="searchUserProfile(searchInput.value)"
                       class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors duration-200 transform hover:scale-105">
-                Search
+                {{ 'USER_PROFILE.SEARCH' | translate }}
               </button>
             </div>
           </div>
@@ -80,7 +80,7 @@
           <div class="bg-white rounded-2xl border border-gray-200 shadow-lg p-6">
             <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
               <mat-icon class="mr-2 text-purple-500">leaderboard</mat-icon>
-              Top Profiles
+              {{ 'USER_PROFILE.TOPS' | translate }}
             </h3>
             <div class="space-y-3">
               <div *ngFor="let profile of topProfiles; let i = index"
@@ -93,7 +93,7 @@
                     <span class="font-semibold text-gray-800">{{ profile.username }}</span>
                   </div>
                   <span class="text-sm font-medium px-3 py-1 bg-purple-500 text-white rounded-full">
-                    {{ profile.score }} points
+                    {{ profile.score }} {{ 'USER_PROFILE.POINTS' | translate }}
                   </span>
                 </div>
               </div>

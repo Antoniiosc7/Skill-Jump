@@ -4,13 +4,15 @@ import { ApiService } from '../../services/api.service';
 import { FormsModule } from '@angular/forms';
 import { LoginDto } from '../../services/models/login-dto.model';
 import { AuthService } from '../../services/auth.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    TranslatePipe
   ],
   styleUrls: ['./login.component.css']
 })

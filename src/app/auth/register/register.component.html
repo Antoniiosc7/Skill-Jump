@@ -1,28 +1,28 @@
 <div class="container mx-auto p-6 max-w-md">
-  <h2 class="text-3xl font-semibold text-center mb-6">Register</h2>
+  <h2 class="text-3xl font-semibold text-center mb-6">{{ 'REGISTER.TITLE' | translate }}</h2>
   <form (ngSubmit)="register()">
     <div class="mb-4">
-      <label for="nombre" class="block text-gray-700">Nombre</label>
+      <label for="nombre" class="block text-gray-700">{{ 'REGISTER.FIRSTNAME_LABEL' | translate }}</label>
       <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" class="w-full p-2 border border-gray-300 rounded mt-1" required>
     </div>
     <div class="mb-4">
-      <label for="apellido" class="block text-gray-700">Apellido</label>
+      <label for="apellido" class="block text-gray-700">{{ 'REGISTER.LASTNAME_LABEL' | translate }}</label>
       <input type="text" id="apellido" [(ngModel)]="apellido" name="apellido" class="w-full p-2 border border-gray-300 rounded mt-1" required>
     </div>
     <div class="mb-4">
-      <label for="username" class="block text-gray-700">Username</label>
+      <label for="username" class="block text-gray-700">{{ 'REGISTER.USERNAME_LABEL' | translate }}</label>
       <input type="text" id="username" [(ngModel)]="username" name="username" class="w-full p-2 border border-gray-300 rounded mt-1" required>
     </div>
     <div class="mb-4">
-      <label for="email" class="block text-gray-700">Email</label>
+      <label for="email" class="block text-gray-700">{{ 'REGISTER.EMAIL_LABEL' | translate }}</label>
       <input type="email" id="email" [(ngModel)]="mail" name="mail" class="w-full p-2 border border-gray-300 rounded mt-1" required>
     </div>
     <div class="mb-4">
-      <label for="password" class="block text-gray-700">Password</label>
+      <label for="password" class="block text-gray-700">{{ 'REGISTER.PASSWORD_LABEL' | translate }}</label>
       <input type="password" id="password" [(ngModel)]="password" name="password" class="w-full p-2 border border-gray-300 rounded mt-1" required>
     </div>
     <div class="mb-4">
-      <label for="confirmPassword" class="block text-gray-700">Confirm Password</label>
+      <label for="confirmPassword" class="block text-gray-700">{{ 'REGISTER.PASSWORD_CONFIRM_LABEL' | translate }}</label>
       <input type="password" id="confirmPassword" class="w-full p-2 border border-gray-300 rounded mt-1" required>
     </div>
     <button type="submit" class="bg-green-600 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-full shadow-md w-full">
@@ -30,6 +30,6 @@
     </button>
   </form>
   <p class="text-center mt-4">
-    Already have an account? <a (click)="navigateToLogin()" class="text-blue-600 hover:underline cursor-pointer">Login</a>
+    {{ 'REGISTER.LOGIN_LINK' | translate }} <a (click)="navigateToLogin()" class="text-blue-600 hover:underline cursor-pointer">{{ 'LOGIN.TITLE' | translate }}</a>
   </p>
 </div>

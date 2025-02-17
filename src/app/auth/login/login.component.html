@@ -1,12 +1,12 @@
 <div class="container mx-auto p-6 max-w-md">
-  <h2 class="text-3xl font-semibold text-center mb-6">Login</h2>
+  <h2 class="text-3xl font-semibold text-center mb-6">{{ 'LOGIN.TITLE' | translate }}</h2>
   <form (ngSubmit)="login()">
     <div class="mb-4">
-      <label for="username" class="block text-gray-700">Username</label>
+      <label for="username" class="block text-gray-700">{{ 'LOGIN.USERNAME_LABEL' | translate }}</label>
       <input type="text" id="username" [(ngModel)]="username" name="username" class="w-full p-2 border border-gray-300 rounded mt-1" required>
     </div>
     <div class="mb-4">
-      <label for="password" class="block text-gray-700">Password</label>
+      <label for="password" class="block text-gray-700">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
       <input type="password" id="password" [(ngModel)]="password" name="password" class="w-full p-2 border border-gray-300 rounded mt-1" required>
     </div>
     <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full shadow-md w-full">
@@ -14,6 +14,6 @@
     </button>
   </form>
   <p class="text-center mt-4">
-    Don't have an account? <a (click)="navigateToRegister()" class="text-blue-600 hover:underline cursor-pointer">Register</a>
+    {{ 'LOGIN.REGISTER_LINK' | translate }} <a (click)="navigateToRegister()" class="text-blue-600 hover:underline cursor-pointer">{{ 'REGISTER.TITLE' | translate }}</a>
   </p>
 </div>

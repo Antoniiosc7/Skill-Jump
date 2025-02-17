@@ -3,13 +3,15 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { FormsModule } from '@angular/forms';
 import { RegisterDto } from '../../services/models/register-dto.model';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    TranslatePipe
   ],
   styleUrls: ['./register.component.css']
 })
